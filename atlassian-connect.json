@@ -1,0 +1,26 @@
+{
+     "name": "PayPal Invoicing",
+     "description": "Atlassian Connect app",
+     "key": "com.example.myapp",
+     "baseUrl": "https://<placeholder-url>",
+     "vendor": {
+         "name": "Angelleye",
+         "url": "https://www.angelleye.com/"
+     },
+     "authentication": {
+         "type": "none"
+     },
+     "apiVersion": 1,
+     "modules": {
+         "generalPages": [
+             {
+                 "url": "/helloworld.html",
+                 "key": "hello-world",
+                 "location": "system.top.navigation.bar",
+                 "name": {
+                     "value": "PayPal Invoicing"
+                 }
+             }
+         ]
+     }
+ }

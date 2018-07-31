@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.4.1/jquery-migrate.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/sinon.js/1.15.4/sinon.js"></script>
+
+  <script src="aui/js/aui.min.js"></script>
+  <script src="aui/js/aui-experimental.min.js"></script>
+  <script src="aui/js/aui-datepicker.min.js"></script>
+
+  <link rel="stylesheet" href="aui/css/aui.min.css" media="all">
+  <link rel="stylesheet" href="aui/css/aui-experimental.min.css" media="all">
+
+  <style>
+    .custom-field-group {
+      padding-left: 66px !important;
+    }
+
+    .form.aui .select {
+      padding: 2px 5px 5px 5px !important;
+    }
+
+    .mt20 {
+      margin-top: 20px !important;
+    }
+
+    .add-item-btn {
+      background-color: #ecf7fc;
+      border: 1px solid #91d4f0;
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      display: inline-block;
+    }
+
+    .add-item-btn:hover {
+      color: #004975;
+    }
+
+    .add-item {
+      width: 100%;
+    }
+
+    .total-section {
+      display: inline-block;
+      border-top: 2px solid #ddd;
+    }
+
+    .sub-total-table {
+      border: 2px solid #ddd;
+      border-collapse: collapse;
+      text-align: right;
+    }
+
+    .sub-total-table tr td,
+    .sub-total-table tr th {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .grey-bg {
+      background-color: #f6f6f6;
+    }
+
+    .txtareacls{
+      float: unset !important;
+      margin-left: 0 !important;
+      padding: 0 !important;
+      text-align: left !important;
+    }
+
+    .txtarea{
+      font-family: inherit;
+      line-height: 1.4285714285714;
+      margin: 0;
+      padding: 4px 5px;
+      border: 1px solid #ccc;
+      border-radius: 3.01px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+  </style>
+</head>
+
+<body class="aui-page-fixed">
+  <!-- For a normal page, omit all 'aui-page-' classes here -->
+  <div id="page">
+    <section id="content" role="main">
+      <header class="aui-page-header">
+        <div class="aui-page-header-inner">
+          <div class="aui-page-header-main">
+            <h1>PayPal for Jira</h1>
+          </div>
+        </div>
+      </header>
+      <div class="aui-page-panel">
+        <div class="aui-page-panel-inner">
+          <section class="aui-page-panel-content">
+            <form class="aui">
+              <div class="aui-group">
+                <div class="aui-item">
+                  <img src="images/logo.png">
+                </div>
+                <div class="aui-item"></div>
+                <div class="aui-item">
+                  <div class="field-group">
+                    <label for="text-input">Invoice Number</label>
+                    <input class="text" type="text" id="text-input" name="text-input" title="Text input">
+                  </div>
+                  <div class="field-group">
+                    <label for="text-input">Invoice Date</label>
+                    <input class="text aui-date-picker" id="demo-range-2" type="date" />
+                  </div>
+                  <div class="field-group">
+                    <label for="text-input">Referance</label>
+                    <input class="text" type="text" id="text-input" name="text-input" title="Text input" placeholder="Such as PO#">
+                  </div>
+                  <div class="field-group">
+                    <label for="text-input">Due Date</label>
+                    <input class="text aui-date-picker" id="demo-range-3" type="date" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="aui-group aui-group-split">
+                <div class="aui-item">
+                  <div class="field-group custom-field-group">
+                    <label for="text-input"><h4>Bill to:</h4></label>
+                    <input class="text full-width-field" type="text" id="text-input" name="text-input" title="Text input">
+                  </div>
+                  <div class="field-group custom-field-group">
+                    <label for="text-input"><h4>Cc:</h4></label>
+                    <input class="text full-width-field" type="text" id="text-input" name="text-input" title="Text input">
+                  </div>
+                </div>
+                <div class="aui-item">
+                  <p></p>
+                </div>
+              </div>
+
+              <div class="aui-group aui-group-split">
+                <div class="aui-item">
+                  <h3>Customize</h3></div>
+                <div class="aui-item">
+                  <select class="select mt20" id="select-example" name="select-example">
+                      <option>Quantity</option>
+                      <option>Hours</option>
+                      <option>Amount only</option>
+                  </select>
+                </div>
+                <div class="aui-item">
+                  <button class="mt20 aui-button aui-dropdown2-trigger" aria-controls="example-dropdown">Add/remove detail</button>
+                  <aui-dropdown-menu id="example-dropdown">
+                    <aui-section label="Add to line item">
+                      <aui-item-checkbox interactive checked>Tax</aui-item-checkbox>
+                      <aui-item-checkbox interactive checked>Detailed description</aui-item-checkbox>
+                      <aui-item-checkbox interactive>Item discount</aui-item-checkbox>
+                      <aui-item-checkbox interactive>Date</aui-item-checkbox>
+                    </aui-section>
+
+                    <aui-section label="Add to subtotal">
+                      <aui-item-checkbox interactive checked>Invoice discount</aui-item-checkbox>
+                      <aui-item-checkbox interactive checked>Shipping</aui-item-checkbox>
+                      <aui-item-checkbox interactive>Custom amount</aui-item-checkbox>
+                    </aui-section>
+
+                    <aui-section label="">
+                      <aui-item-link href="http://example.com#profile">Advanced Tax option</aui-item-link>
+                    </aui-section>
+
+                  </aui-dropdown-menu>
+                </div>
+                <div class="aui-item">
+                  <select class="select mt20" id="select-example" name="select-example">
+                      <option>USD - U.S. Dollars</option>
+                      <option>GBP - British Pounds</option>
+                      <option>CAD - Canadian Dollars</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="aui-group">
+                <div class="aui-item">
+                  <table class="aui">
+                    <thead>
+                      <tr>
+                        <th id="basic-desc">Description</th>
+                        <th id="basic-qty">Quantity</th>
+                        <th id="basic-price">Price</th>
+                        <th id="basic-tax">Tax</th>
+                        <th id="basic-amt">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td headers="basic-desc">
+                          <input class="text full-width-field" type="text" id="text-input" name="text-input" title="Text input" placeholder="Item name">
+                          <textarea class="textarea full-width-field" name="comment" id="textarea-id" placeholder="Enter detailed description (optional)" style="margin-top: 5px;"></textarea>
+                        </td>
+                        <td headers="basic-qty"><input class="text short-field" type="text" id="text-input" name="text-input" title="Text input" value="1"></td>
+                        <td headers="basic-price"><input class="text short-field" type="text" id="text-input" name="text-input" title="Text input" value="0.00"></td>
+                        <td headers="basic-tax"><input class="text short-field" type="text" id="text-input" name="text-input" title="Text input" placeholder="No Tax"></td>
+                        <td headers="basic-amt" class="grey-bg">$0.00</td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="aui-group">
+                <div class="aui-item">
+                  <div class="add-item">
+                    <a class="add-item-btn" href=""><span class="aui-icon aui-icon-small aui-iconfont-add"></span> Add another line item</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="aui-group aui-group-split mt20">
+                <div class="aui-item">
+                  <div class="checkbox">
+                    <input class="checkbox" type="checkbox" name="checkBoxOne" id="checkBoxOne">
+                    <label for="checkBoxOne">Allow partial payment</label>
+                  </div>
+                  <label for="d-fname-short">Minimum amount due (optional)</label>
+                  <input class="text short-field" type="text" id="d-fname-short" name="d-fname-short" title="first name"><label> USD</label>
+                  <div class="checkbox">
+                    <input class="checkbox" type="checkbox" name="checkBoxTwo" id="checkBoxTwo">
+                    <label for="checkBoxTwo">Allow customer to add a tip.</label>
+                  </div>
+                </div>
+
+                <div class="aui-item">
+                  <div class="total-section">
+                    <table class="sub-total-table">
+                      <tbody>
+                        <tr>
+                          <th colspan="3">Subtotal</th>
+                          <td class="grey-bg">$0.00</td>
+                        </tr>
+                        <tr>
+                          <th>Discount</th>
+                          <td>
+                            <input type="text" name="invDiscount" id="" class="text short-field" placeholder="0">
+                          </td>
+                          <td>
+                            <input type="text" name="invDiscount" id="" class="text short-field" placeholder="0">
+                          </td>
+                          <td class="grey-bg">$0.00</td>
+                        </tr>
+                        <tr>
+                          <th>Shipping</th>
+                          <td colspan="2">
+                            <input type="text" name="invDiscount" id="" class="text short-field" placeholder="0">
+                          </td>
+                          <td class="grey-bg">$0.00</td>
+                        </tr>
+                        <tr class="grey-bg">
+                          <th colspan="3">Total</th>
+                          <td>$0.00 USD</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="aui-group mt20">
+                <div class="aui-item">
+                  <div class="field-group" style="padding-left:0">
+                    <label for="comment" class="txtareacls"><h4 style="margin-bottom:10px">Note to recipient</h4></label>
+                    <textarea class="txtarea" name="comment" rows="5" id="comment" placeholder="Your comment here..."></textarea>
+                  </div>
+                </div>
+                <div class="aui-item">
+                  <div class="field-group" style="padding-left:0">
+                    <label for="comment" class="txtareacls"><h4 style="margin-bottom:10px">Terms and conditions</h4></label>
+                    <textarea class="txtarea" name="comment" rows="5" id="comment" placeholder="Your comment here..."></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="aui-group aui-group-split mt20">
+                <div class="aui-item">
+                  <div class="">
+                      <label for="uploadFile">Attach file</label>
+                      <input class="upfile" type="file" id="uploadFile" name="uploadFile" title="upload file">
+                  </div>
+                  <div class="checkbox mt20">
+                    <input class="checkbox" type="checkbox" name="checkBoxOne" id="checkBoxOne">
+                    <label for="checkBoxOne">Add memo to self</label>
+                  </div>
+                  <div class="field-group" style="padding-left:0">
+                    <textarea class="txtarea" name="comment" rows="5" id="comment" placeholder="Your comment here..."></textarea>
+                  </div>
+                </div>
+                <div class="aui-item">
+                </div>
+              </div>
+              <div class="aui-group aui-group-split">
+                <div class="aui-item">
+                  <button class="aui-button aui-button-primary">Send</button>
+                  <button class="aui-button">Save as draft</button>
+                </div>
+                <div class="aui-item">
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    AJS.$(document).ready(function() {
+      AJS.$('#demo-range-2').datePicker({
+        'overrideBrowserDefault': true
+      });
+      AJS.$('#demo-range-3').datePicker({
+        'overrideBrowserDefault': true
+      });
+    });
+  </script>
+
+</body>
+
+</html>
