@@ -159,8 +159,8 @@
                                                     </td>
                                                     <td headers="basic-qty"><input class="text short-field" type="text" id="itemQty_0" name="itemQty" title="Quantity" value="1"></td>
                                                     <td headers="basic-price"><input class="text short-field" type="text" id="itemPrice_0" name="itemPrice" title="Price" value="0.00"></td>
-                                                    <td headers="basic-tax"><input class="text short-field" type="text" id="taxRate_0" name="taxRate" title="Tax" placeholder="No Tax"></td>
-                                                    <td headers="basic-amt" class="grey-bg"><input type="hidden" id="basicAmt_0" name="basicAmt">$0.00</td>                        
+                                                    <td headers="basic-tax"><input class="text short-field" type="text" id="taxRate_0" name="taxRate" title="Tax" placeholder="No Tax"></td>                                                    
+                                                    <td headers="basic-amt" class="grey-bg"><input type="text" id="basicAmt_0" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>
                                                     <td></td>
                                                 </tr>
                                             </tbody>
@@ -182,8 +182,10 @@
                                             <input class="checkbox" type="checkbox" name="allowPartialPayments" id="allowPartialPayments">
                                             <label for="allowPartialPayments">Allow partial payment</label>
                                         </div>
-                                        <label for="d-fname-short">Minimum amount due (optional)</label>
-                                        <input class="text short-field" type="text" id="minimumDueAmount" name="minimumDueAmount" title="Minimum amount due"><label> USD</label>
+                                        <div class="mamout" style="display: none">
+                                            <label for="d-fname-short">Minimum amount due (optional)</label>
+                                            <input class="text short-field" type="text" id="minimumDueAmount" name="minimumDueAmount" title="Minimum amount due"><label> USD</label>
+                                        </div>
                                         <div class="checkbox">
                                             <input class="checkbox" type="checkbox" name="allowTips" id="allowTips">
                                             <label for="allowTips">Allow customer to add a tip.</label>
@@ -201,7 +203,7 @@
                                                     <tr>
                                                         <th>Discount</th>
                                                         <td>
-                                                            <input type="text" name="invDiscount" id="invDiscount" class="text short-field" placeholder="0">
+                                                            <input type="text" name="invDiscount" id="invDiscount" class="text short-field" value="0.00">
                                                         </td>
                                                         <td>
                                                             <select name="invoiceDiscType" id="invoiceDiscType" class="select">
@@ -214,13 +216,13 @@
                                                     <tr>
                                                         <th>Shipping</th>
                                                         <td colspan="2">
-                                                            <input type="text" name="shippingAmount" id="shippingAmount" class="text short-field" placeholder="0">
-                                                        </td>
-                                                        <td class="grey-bg">$0.00</td>
+                                                            <input type="text" name="shippingAmount" id="shippingAmount" class="text short-field" value="0.00">
+                                                        </td>                                                        
+                                                        <td class="grey-bg shippingAmountTd">$0.00</td>
                                                     </tr>
                                                     <tr class="grey-bg">
-                                                        <th colspan="3">Total</th>
-                                                        <td>$0.00 USD</td>
+                                                        <th colspan="3">Total</th>                                                        
+                                                        <td class="finalTotal">$0.00 USD</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -249,9 +251,9 @@
                                         </div>
                                         <div class="checkbox mt20">
                                             <input class="checkbox" type="checkbox" name="addMemoDesc" id="addMemoDesc">
-                                            <label for="checkBoxOne">Add memo to self</label>
+                                            <label for="addMemoDesc">Add memo to self</label>
                                         </div>
-                                        <div class="field-group" style="padding-left:0">
+                                        <div class="field-group aememodesc" style="padding-left:0;display: none">
                                             <textarea class="txtarea" name="memodesc" rows="5" id="memodesc" placeholder="Add memo to self (your recipient won't see this)"></textarea>
                                         </div>
                                     </div>
@@ -273,24 +275,24 @@
             </section>
         </div>
         <script id="connect-loader" data-options="sizeToParent:true;">
-        (function () {
-            var getUrlParam = function (param) {
-                var codedParam = (new RegExp(param + '=([^&]*)')).exec(window.location.search)[1];
-                return decodeURIComponent(codedParam);
-            };
+            (function () {
+                var getUrlParam = function (param) {
+                    var codedParam = (new RegExp(param + '=([^&]*)')).exec(window.location.search)[1];
+                    return decodeURIComponent(codedParam);
+                };
 
-            var baseUrl = getUrlParam('xdm_e') + getUrlParam('cp');
-            var options = document.getElementById('connect-loader').getAttribute('data-options');
+                var baseUrl = getUrlParam('xdm_e') + getUrlParam('cp');
+                var options = document.getElementById('connect-loader').getAttribute('data-options');
 
-            var script = document.createElement("script");
-            script.src = baseUrl + '/atlassian-connect/all.js';
+                var script = document.createElement("script");
+                script.src = baseUrl + '/atlassian-connect/all.js';
 
-            if (options) {
-                script.setAttribute('data-options', options);
-            }
+                if (options) {
+                    script.setAttribute('data-options', options);
+                }
 
-            document.getElementsByTagName("head")[0].appendChild(script);
-        })();
+                document.getElementsByTagName("head")[0].appendChild(script);
+            })();
         </script>
         <script>
             AJS.$(document).ready(function () {
@@ -301,10 +303,7 @@
                 AJS.$('#dueDate').datePicker({
                     'overrideBrowserDefault': true,
                     'dateFormat': 'mm/dd/yy'
-                });
-                AJS.$('#allowPartialPayments').on('click', function () {
-                    //alert('hi'); 
-                });
+                });                
 
                 AJS.$('#add_new_item').on('click', function (e) {
                     e.preventDefault();
@@ -317,8 +316,8 @@
                        </td>';
                     $html += '<td headers="basic-qty"><input class="text short-field" type="text" id="itemQty_' + row_count + '" name="itemQty" title="Quantity" value="1"></td>';
                     $html += '<td headers="basic-price"><input class="text short-field" type="text" id="itemPrice_' + row_count + '" name="itemPrice" title="Price" value="0.00"></td>';
-                    $html += '<td headers="basic-tax"><input class="text short-field" type="text" id="taxRate_' + row_count + '" name="taxRate" title="Tax" placeholder="No Tax"></td>';
-                    $html += '<td headers="basic-amt" class="grey-bg"><input type="hidden" id="basicAmt_' + row_count + '" name="basicAmt">$0.00</td>';
+                    $html += '<td headers="basic-tax"><input class="text short-field" type="text" id="taxRate_' + row_count + '" name="taxRate" title="Tax" placeholder="No Tax"></td>';                    
+                    $html += '<td headers="basic-amt" class="grey-bg"><input type="hidden" id="basicAmt_' + row_count + '" name="basicAmt"><input type="text" id="basicAmt_'+row_count+'" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>';
                     $html += '<td style="cursor:pointer" class="remove_ae_row" data-rowNumber="' + row_count + '" id="remove_ae_row_' + row_count + '"><span class="aui-icon aui-icon-small aui-iconfont-cross-circle"></span></td>';
                     $html += '</tr>';
 
@@ -340,8 +339,79 @@
                         AJS.$(this).find('.remove_ae_row').attr('id', 'remove_ae_row_' + i);
                         AJS.$(this).find('.remove_ae_row').attr('data-rownumber', i);
                     });
+                    countSubTotal();
+	            countFinalTotal(AJS.$('input[name="invDiscount"]').val());
+                });
+
+                AJS.$("#allowPartialPayments").click(function () {
+                    if (AJS.$(this).is(":checked")) {
+                        AJS.$(".mamout").show(300);
+                    } else {
+                        AJS.$(".mamout").hide(200);
+                    }
+                });
+
+                AJS.$("#addMemoDesc").click(function () {
+                    if (AJS.$(this).is(":checked")) {
+                        AJS.$(".aememodesc").show(300);
+                    } else {
+                        AJS.$(".aememodesc").hide(200);
+                    }
+                });
+
+                 AJS.$(document).on('change blur keyup','input[id^="itemQty_"]', function () {
+                    countSubTotal();
+                });
+                AJS.$(document).on('change blur keyup','input[id^="itemPrice_"]', function () {
+                    countSubTotal();
+                });
+                AJS.$('input[name="invDiscount"]').on('change blur keyup', function () {
+                    countFinalTotal(AJS.$(this).val());
+                });
+
+                AJS.$(document).on('change','select[name="invoiceDiscType"]', function () {
+                    countFinalTotal(AJS.$('input[name="invDiscount"]').val());
+                });
+
+                AJS.$(document).on('change blur keyup','input[name="shippingAmount"]', function () {
+                    countFinalTotal(AJS.$('input[name="invDiscount"]').val());
                 });
             });
+
+            function countFinalTotal(val) {
+                var total = Number(AJS.$('.itemSubTotal').text().replace(/[^0-9\.-]+/g, ""));
+                var discountBase = AJS.$('select[name="invoiceDiscType"]').val();
+                var discount = parseFloat(val);
+                var discountAmt = 0;
+                if (discountBase == 'percentage') {
+                    discountAmt = parseFloat((total * discount) / 100);
+                } else if (discountBase == 'dollar') {
+                    discountAmt = parseFloat(val);
+                }                
+                AJS.$('.invoiceDiscountAmount').text('$' + discountAmt.toFixed(2));
+                
+                var shippingAmount = parseFloat(AJS.$('input[name="shippingAmount"]').val());
+                if (shippingAmount == '')
+                    shippingAmount = 0;
+                AJS.$('.shippingAmountTd').text('$' + shippingAmount.toFixed(2));
+
+                var finalTotal = total - discountAmt + shippingAmount;
+
+                AJS.$('.finalTotal').text('$'+finalTotal.toFixed(2) + ' USD');
+            }
+
+            function countSubTotal() {
+                var total = 0;
+                AJS.$('input[id^="itemQty_"]').each(function () {
+                    var qty = parseInt(AJS.$(this).val());
+                    var price = parseFloat(AJS.$(this).parent().next().find('input[id^="itemPrice_"]').val());
+                    var amount = qty * price;
+                    AJS.$(this).parent().siblings('.grey-bg').find('input[name="basicAmt"]').val('$'+amount.toFixed(2));
+                    total = total + amount;
+                });
+                AJS.$('.itemSubTotal').text('$' + total.toFixed(2));
+                countFinalTotal(AJS.$('input[name="invDiscount"]').val());
+            }
         </script>
 
     </body>
