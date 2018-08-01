@@ -2,17 +2,17 @@
 <html lang="en">
 
 <head>
-
+    
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.4.1/jquery-migrate.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/sinon.js/1.15.4/sinon.js"></script>
 
-  <script src="aui/js/aui.min.js"></script>
-  <script src="aui/js/aui-experimental.min.js"></script>
-  <script src="aui/js/aui-datepicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/js/aui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/js/aui-experimental.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/js/aui-datepicker.min.js"></script>
 
-  <link rel="stylesheet" href="aui/css/aui.min.css" media="all">
-  <link rel="stylesheet" href="aui/css/aui-experimental.min.css" media="all">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/css/aui.min.css" media="all">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/css/aui-experimental.min.css" media="all">
 
   <style>
     .custom-field-group {
@@ -229,7 +229,7 @@
                 <div class="aui-item">
                   <div class="field-group" style="padding-left:0">
                     <label for="notes" class="txtareacls"><h4 style="margin-bottom:10px">Note to recipient</h4></label>
-                    <textarea class="txtarea" name="notes" rows="5" id="notes" placeholder="Such as “Thank you for your business”"></textarea>
+                    <textarea class="txtarea" name="notes" rows="5" id="notes" placeholder="Such as 'Thank you for your business'"></textarea>
                   </div>
                 </div>
                 <div class="aui-item">
@@ -270,6 +270,26 @@
       </div>
     </section>
   </div>
+    <script id="connect-loader" data-options="sizeToParent:true;">
+         (function() {
+             var getUrlParam = function (param) {
+                 var codedParam = (new RegExp(param + '=([^&]*)')).exec(window.location.search)[1];
+                 return decodeURIComponent(codedParam);
+             };
+
+             var baseUrl = getUrlParam('xdm_e') + getUrlParam('cp');
+             var options = document.getElementById('connect-loader').getAttribute('data-options');
+
+             var script = document.createElement("script");
+             script.src = baseUrl + '/atlassian-connect/all.js';
+
+             if(options) {
+                 script.setAttribute('data-options', options);
+             }
+
+             document.getElementsByTagName("head")[0].appendChild(script);
+         })();
+    </script>
   <script>
     AJS.$(document).ready(function() {
       AJS.$('#issueDate').datePicker({
@@ -280,6 +300,10 @@
         'overrideBrowserDefault': true,
         'dateFormat' : 'mm/dd/yy'
       });
+      AJS.$('#allowPartialPayments').on('click',function(){
+         alert('hi'); 
+      });
+      
     });
   </script>
 
