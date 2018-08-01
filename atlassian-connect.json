@@ -1,26 +1,26 @@
 {
-     "name": "PayPal Invoicing",
-     "description": "Atlassian Connect app",
-     "key": "com.example.myapp",
-     "baseUrl": "https://<placeholder-url>",
-     "vendor": {
-         "name": "Angelleye",
-         "url": "https://www.angelleye.com/"
-     },
-     "authentication": {
-         "type": "none"
-     },
-     "apiVersion": 1,
-     "modules": {
-         "generalPages": [
-             {
-                 "url": "/helloworld.html",
-                 "key": "hello-world",
-                 "location": "system.top.navigation.bar",
-                 "name": {
-                     "value": "PayPal Invoicing"
-                 }
-             }
-         ]
-     }
- }
+  "name": "PayPal for Jira",
+  "description": "Create PayPal invoices from within Jira.",
+  "key": "com.angelleye.paypal-jira",
+  "baseUrl": "https://sandbox.angelleye.com/atlassian/paypal-for-jira",
+  "vendor": {
+    "name": "AngellEYE, LLC",
+    "url": "https://www.angelleye.com/"
+  },
+  "authentication": {
+    "type": "none"
+  },
+  "apiVersion": 1,
+  "modules": {
+    "generalPages": [
+      {
+        "url": "/PayPalInvoicing.html",
+        "key": "paypal-jira",
+        "location": "system.top.navigation.bar",
+        "name": {
+          "value": "PayPal Invoicing"
+        }
+      }
+    ]
+  }
+}
