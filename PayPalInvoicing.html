@@ -262,8 +262,8 @@
                                 </div>
                                 <div class="aui-group aui-group-split">
                                     <div class="aui-item">
-                                        <button class="aui-button aui-button-primary">Send</button>
-                                        <button class="aui-button">Save as draft</button>
+                                        <button class="aui-button aui-button-primary" id="send_invoice">Send</button>
+                                        <button class="aui-button" id="save_as_draft">Save as draft</button>
                                     </div>
                                     <div class="aui-item">
                                     </div>
@@ -376,6 +376,15 @@
                 AJS.$(document).on('change blur keyup','input[name="shippingAmount"]', function () {
                     countFinalTotal(AJS.$('input[name="invDiscount"]').val());
                 });
+                
+                AJS.$(document).on('click','#send_invoice', function (e) {
+                    e.preventDefault();
+                });
+                
+                AJS.$(document).on('click','#save_as_draft', function (e) {
+                    e.preventDefault();
+                });
+                
             });
 
             function countFinalTotal(val) {
