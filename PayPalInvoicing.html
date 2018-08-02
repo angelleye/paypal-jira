@@ -102,7 +102,7 @@
                             <form class="aui">
                                 <div class="aui-group">
                                     <div class="aui-item">
-                                        <img src="images/your-logo-here.png" height="150" width="150">
+                                        <img src="images/your-logo-here.png" height="150" width="150" id="logoid">
                                     </div>
                                     <div class="aui-item"></div>
                                     <div class="aui-item">
@@ -115,7 +115,7 @@
                                             <input class="text aui-date-picker" id="issueDate"  name="issueDate" type="date" />
                                         </div>
                                         <div class="field-group">
-                                            <label for="reference">Referance</label>
+                                            <label for="reference">Reference</label>
                                             <input class="text" type="text" id="reference" name="reference" title="Referance" placeholder="Such as PO#">
                                         </div>
                                         <div class="field-group">
@@ -159,7 +159,10 @@
                                                     </td>
                                                     <td headers="basic-qty"><input class="text short-field" type="text" id="itemQty_0" name="itemQty" title="Quantity" value="1"></td>
                                                     <td headers="basic-price"><input class="text short-field" type="text" id="itemPrice_0" name="itemPrice" title="Price" value="0.00"></td>
-                                                    <td headers="basic-tax"><input class="text short-field" type="text" id="taxRate_0" name="taxRate" title="Tax" placeholder="No Tax"></td>                                                    
+                                                    <td headers="basic-tax">
+                                                        <input class="text short-field" type="text" id="taxName_0" name="taxName" title="Tax" placeholder="Name">
+                                                        <input class="text short-field" type="text" id="taxRate_0" name="taxRate" title="Tax" placeholder="Amount" value="0.00">
+                                                    </td>
                                                     <td headers="basic-amt" class="grey-bg"><input type="text" id="basicAmt_0" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>
                                                     <td></td>
                                                 </tr>
@@ -316,7 +319,7 @@
                        </td>';
                     $html += '<td headers="basic-qty"><input class="text short-field" type="text" id="itemQty_' + row_count + '" name="itemQty" title="Quantity" value="1"></td>';
                     $html += '<td headers="basic-price"><input class="text short-field" type="text" id="itemPrice_' + row_count + '" name="itemPrice" title="Price" value="0.00"></td>';
-                    $html += '<td headers="basic-tax"><input class="text short-field" type="text" id="taxRate_' + row_count + '" name="taxRate" title="Tax" placeholder="No Tax"></td>';                    
+                    $html += '<td headers="basic-tax"><input class="text short-field" type="text" id="taxName_' + row_count + '" name="taxName" title="Tax" placeholder="Name"> <input class="text short-field" type="text" id="taxRate_' + row_count + '" name="taxRate" title="Tax" placeholder="Amount" value="0.00"></td>';
                     $html += '<td headers="basic-amt" class="grey-bg"><input type="hidden" id="basicAmt_' + row_count + '" name="basicAmt"><input type="text" id="basicAmt_'+row_count+'" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>';
                     $html += '<td style="cursor:pointer" class="remove_ae_row" data-rowNumber="' + row_count + '" id="remove_ae_row_' + row_count + '"><span class="aui-icon aui-icon-small aui-iconfont-cross-circle"></span></td>';
                     $html += '</tr>';
@@ -368,6 +371,9 @@
                 AJS.$('input[name="invDiscount"]').on('change blur keyup', function () {
                     countFinalTotal(AJS.$(this).val());
                 });
+                AJS.$(document).on('change blur keyup','input[id^="taxRate_"]', function () {
+                    countSubTotal();
+                });
 
                 AJS.$(document).on('change','select[name="invoiceDiscType"]', function () {
                     countFinalTotal(AJS.$('input[name="invDiscount"]').val());
@@ -379,7 +385,106 @@
                 
                 AJS.$(document).on('click','#send_invoice', function (e) {
                     e.preventDefault();
+                    var invoiceNumber = AJS.$('#invoiceNumber').val();
+                    var issueDate = AJS.$('#issueDate').val();
+                    var reference = AJS.$('#reference').val();
+                    var dueDate = AJS.$('#dueDate').val();
+                    var billToEmail = AJS.$('#billToEmail').val();
+                    var billToEmailCc = AJS.$('#billToEmailCc').val();
+                    
+                    var itemNames = AJS.$("input[name='itemName']").map(function(){return $(this).val();}).get();
+                    var itemDescriptions = AJS.$("textarea[name='itemDescription']").map(function(){return $(this).val();}).get();
+                    var itemQtys = AJS.$("input[name='itemQty']").map(function(){return $(this).val();}).get();
+                    var itemPrices = AJS.$("input[name='itemPrice']").map(function(){return $(this).val();}).get();
+                    
+                    var taxNames = AJS.$("input[name='taxName']").map(function(){return $(this).val();}).get();
+                    var taxRates = AJS.$("input[name='taxRate']").map(function(){return $(this).val();}).get();
+                    var itemsAmts = AJS.$("input[name='basicAmt']").map(function(){return $(this).val();}).get();
+                    
+                    var partialPayments,allowTips = false;
+                    var minimumDueAmount,memodesc = '';
+                    if(AJS.$("#allowPartialPayments").is(":checked")){
+                        partialPayments = true;
+                        minimumDueAmount = AJS.$("#minimumDueAmount").val();
+                    }
+                     if(AJS.$("#allowTips").is(":checked")){
+                        allowTips = true;
+                    }
+                    
+                    var invDiscount = AJS.$("#invDiscount").val();
+                    var invoiceDiscType = AJS.$("#invoiceDiscType").val();
+                    var shippingAmount = AJS.$("#shippingAmount").val();
+                    var itemSubTotal = AJS.$(".itemSubTotal").html();
+                    var invoiceDiscountAmount = AJS.$(".invoiceDiscountAmount").html();
+                    var shippingAmountTd = AJS.$(".shippingAmount").html();
+                    var finalTotal = AJS.$(".finalTotal").html();
+                    
+                    var notes = AJS.$("#notes").val();
+                    var terms = AJS.$("#terms").val();
+                    
+                    var addMemoDesc = 'no';
+                    if(AJS.$("#addMemoDesc").is(":checked")){
+                        addMemoDesc = 'yes';
+                        memodesc = AJS.$("#memodesc").val();
+                    }
+                    var invoiceDiscObj ='';
+                    if(invoiceDiscType === 'percentage'){
+                        invoiceDiscObj = { Percent : invDiscount };
+                    }
+                    else{
+                        invoiceDiscObj = { Amount : invDiscount };
+                    }
+                    var mainItemObject = {};
+                    var itemObj = Object();                     
+                    AJS.$.each(itemNames, function( i, value ) {
+                         //{'Name':itemNames[i],'Description':itemDescriptions[i],'Quantity':itemQtys[i],'UnitPrice':{'Currency':'USD','Value':itemPrices[i]},'Tax':{'Name':taxNames[i],'Percent':taxRates[i]}}
+                        itemObj.Name = itemNames[i];
+                        itemObj.Description = itemDescriptions[i];
+                        itemObj.Quantity = itemQtys[i];
+                        itemObj.UnitPrice = {'Currency':'USD','Value':itemPrices[i]};
+                        itemObj.Tax ={'Name':taxNames[i],'Percent':taxRates[i]};
+                        mainItemObject[i] = itemObj;
+                      });                    
+                      
+                    var request =
+                        {
+                            invoiceData : {
+                                Number : invoiceNumber,
+                                LogoUrl : AJS.$('#logoid').attr('src'),
+                                InvoiceDate : issueDate,
+                                Reference : reference,
+                                AllowPartialPayment : partialPayments,
+                                MinimumAmountDue : minimumDueAmount,
+                                Note : notes,
+                                Terms : terms,
+                                MerchantMemo : memodesc
+                            },
+                            paymentTerm : {
+                                DueDate : dueDate
+                            },   
+                            billingInfo :{
+                                Email : billToEmail
+                            },
+                            itemArray : mainItemObject,
+                            finalDiscountForInvoice : invoiceDiscObj,
+                            ShippingCost :{
+                                Amount : shippingAmount
+                            }                                                       
+                        };                                        
+                    $.ajax({ 
+                        type: 'POST',
+                        url: 'CreateAndSendInvoice.php',
+                        data: {
+                            create_invoice_request : JSON.stringify(request)
+                        },
+                        dataType: "json",                        
+                        success: function (result) {
+                           console.log(result);
+                        }
+                    });
+                                        
                 });
+                      
                 
                 AJS.$(document).on('click','#save_as_draft', function (e) {
                     e.preventDefault();
@@ -414,7 +519,8 @@
                 AJS.$('input[id^="itemQty_"]').each(function () {
                     var qty = parseInt(AJS.$(this).val());
                     var price = parseFloat(AJS.$(this).parent().next().find('input[id^="itemPrice_"]').val());
-                    var amount = qty * price;
+                    var tax=parseFloat(AJS.$(this).parent().next().next().find('input[id^="taxRate_"]').val());
+                    var amount = (qty * price)+tax;
                     AJS.$(this).parent().siblings('.grey-bg').find('input[name="basicAmt"]').val('$'+amount.toFixed(2));
                     total = total + amount;
                 });
