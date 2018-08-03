@@ -401,14 +401,14 @@
                     var taxRates = AJS.$("input[name='taxRate']").map(function(){return $(this).val();}).get();
                     var itemsAmts = AJS.$("input[name='basicAmt']").map(function(){return $(this).val();}).get();
                     
-                    var partialPayments,allowTips = false;
+                    var partialPayments,allowTips = 'no';
                     var minimumDueAmount,memodesc = '';
                     if(AJS.$("#allowPartialPayments").is(":checked")){
-                        partialPayments = true;
+                        partialPayments = 'yes';
                         minimumDueAmount = AJS.$("#minimumDueAmount").val();
                     }
                      if(AJS.$("#allowTips").is(":checked")){
-                        allowTips = true;
+                        allowTips = 'yes';
                     }
                     
                     var invDiscount = AJS.$("#invDiscount").val();
@@ -429,48 +429,51 @@
                     }
                     var invoiceDiscObj ='';
                     if(invoiceDiscType === 'percentage'){
-                        invoiceDiscObj = { Percent : invDiscount };
+                        invoiceDiscObj = { type : 'Percent', 'Amount': invDiscount };
                     }
                     else{
-                        invoiceDiscObj = { Amount : invDiscount };
+                        invoiceDiscObj = { type : 'Amount', 'Amount' : invDiscount };
                     }
                     var mainItemObject = {};
                     var itemObj = Object();                     
-                    AJS.$.each(itemNames, function( i, value ) {
-                         //{'Name':itemNames[i],'Description':itemDescriptions[i],'Quantity':itemQtys[i],'UnitPrice':{'Currency':'USD','Value':itemPrices[i]},'Tax':{'Name':taxNames[i],'Percent':taxRates[i]}}
+                    AJS.$.each(itemNames, function( i, value ) {                         
+                        itemObj = Object();
                         itemObj.Name = itemNames[i];
                         itemObj.Description = itemDescriptions[i];
                         itemObj.Quantity = itemQtys[i];
                         itemObj.UnitPrice = {'Currency':'USD','Value':itemPrices[i]};
                         itemObj.Tax ={'Name':taxNames[i],'Percent':taxRates[i]};
-                        mainItemObject[i] = itemObj;
+                        mainItemObject[i] = itemObj;                        
                       });                    
                       
                     var request =
                         {
-                            invoiceData : {
+                            //invoiceData : {
                                 Number : invoiceNumber,
-                                LogoUrl : AJS.$('#logoid').attr('src'),
+                                //LogoUrl : AJS.$('#logoid').attr('src'),
+                                LogoUrl : 'https://www.angelleye.com/wp-content/uploads/2015/06/angelleye-logo-159x43.png',
                                 InvoiceDate : issueDate,
                                 Reference : reference,
-                                AllowPartialPayment : partialPayments,
-                                MinimumAmountDue : minimumDueAmount,
+                                AllowPartialPayment : partialPayments,                                
                                 Note : notes,
                                 Terms : terms,
-                                MerchantMemo : memodesc
-                            },
-                            paymentTerm : {
-                                DueDate : dueDate
-                            },   
-                            billingInfo :{
-                                Email : billToEmail
-                            },
+                                addMemoDesc : addMemoDesc,
+                                MerchantMemo : memodesc,
+                            //},
+                            MinimumAmountDue :minimumDueAmount,
+                            //paymentTerm : {
+                                DueDate : dueDate,
+                            //},   
+                            //billingInfo :{
+                                BillingEmail : billToEmail,
+                            //},
+                            //ccInfo : {
+                                ccEmail : billToEmailCc,
+                            //},
                             itemArray : mainItemObject,
                             finalDiscountForInvoice : invoiceDiscObj,
-                            ShippingCost :{
-                                Amount : shippingAmount
-                            }                                                       
-                        };                                        
+                            ShippingCost : shippingAmount
+                        };                                       
                     $.ajax({ 
                         type: 'POST',
                         url: 'CreateAndSendInvoice.php',
