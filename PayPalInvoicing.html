@@ -161,7 +161,7 @@
                                                     <td headers="basic-price"><input class="text short-field" type="text" id="itemPrice_0" name="itemPrice" title="Price" value="0.00"></td>
                                                     <td headers="basic-tax">
                                                         <input class="text short-field" type="text" id="taxName_0" name="taxName" title="Tax" placeholder="Name">
-                                                        <input class="text short-field" type="text" id="taxRate_0" name="taxRate" title="Tax" placeholder="Amount" value="0.00">
+                                                        <input class="text short-field" type="text" id="taxRate_0" name="taxRate" title="Tax" placeholder="Amount" value="0.00"> %
                                                     </td>
                                                     <td headers="basic-amt" class="grey-bg"><input type="text" id="basicAmt_0" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>
                                                     <td></td>
@@ -263,10 +263,11 @@
                                     <div class="aui-item">
                                     </div>
                                 </div>
+                                <div id="aui-message-bar" class="mt20"></div>                                
                                 <div class="aui-group aui-group-split">
                                     <div class="aui-item">
-                                        <button class="aui-button aui-button-primary" id="send_invoice">Send</button>
-                                        <button class="aui-button" id="save_as_draft">Save as draft</button>
+                                        <button class="aui-button aui-button-primary" id="send_invoice" style="font-size: 15px">Send</button>                                        
+                                        <button class="aui-button" id="save_as_draft" style="font-size: 15px">Save as draft</button>
                                     </div>
                                     <div class="aui-item">
                                     </div>
@@ -276,6 +277,10 @@
                     </div>
                 </div>
             </section>
+            <footer id="footer" role="contentinfo">
+                <section class="footer-body" style="background: url(images/logo.png) bottom no-repeat">
+                </section>
+            </footer>
         </div>
         <script id="connect-loader" data-options="sizeToParent:true;">
             (function () {
@@ -298,7 +303,7 @@
             })();
         </script>
         <script>
-            AJS.$(document).ready(function () {
+            AJS.$(document).ready(function () {                
                 AJS.$('#issueDate').datePicker({
                     'overrideBrowserDefault': true,
                     'dateFormat': 'mm/dd/yy'
@@ -319,7 +324,7 @@
                        </td>';
                     $html += '<td headers="basic-qty"><input class="text short-field" type="text" id="itemQty_' + row_count + '" name="itemQty" title="Quantity" value="1"></td>';
                     $html += '<td headers="basic-price"><input class="text short-field" type="text" id="itemPrice_' + row_count + '" name="itemPrice" title="Price" value="0.00"></td>';
-                    $html += '<td headers="basic-tax"><input class="text short-field" type="text" id="taxName_' + row_count + '" name="taxName" title="Tax" placeholder="Name"> <input class="text short-field" type="text" id="taxRate_' + row_count + '" name="taxRate" title="Tax" placeholder="Amount" value="0.00"></td>';
+                    $html += '<td headers="basic-tax"><input class="text short-field" type="text" id="taxName_' + row_count + '" name="taxName" title="Tax" placeholder="Name"> <input class="text short-field" type="text" id="taxRate_' + row_count + '" name="taxRate" title="Tax" placeholder="Amount" value="0.00"> %</td>';
                     $html += '<td headers="basic-amt" class="grey-bg"><input type="hidden" id="basicAmt_' + row_count + '" name="basicAmt"><input type="text" id="basicAmt_'+row_count+'" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>';
                     $html += '<td style="cursor:pointer" class="remove_ae_row" data-rowNumber="' + row_count + '" id="remove_ae_row_' + row_count + '"><span class="aui-icon aui-icon-small aui-iconfont-cross-circle"></span></td>';
                     $html += '</tr>';
@@ -447,29 +452,21 @@
                       });                    
                       
                     var request =
-                        {
-                            //invoiceData : {
-                                Number : invoiceNumber,
-                                //LogoUrl : AJS.$('#logoid').attr('src'),
-                                LogoUrl : 'https://www.angelleye.com/wp-content/uploads/2015/06/angelleye-logo-159x43.png',
-                                InvoiceDate : issueDate,
-                                Reference : reference,
-                                AllowPartialPayment : partialPayments,                                
-                                Note : notes,
-                                Terms : terms,
-                                addMemoDesc : addMemoDesc,
-                                MerchantMemo : memodesc,
-                            //},
-                            MinimumAmountDue :minimumDueAmount,
-                            //paymentTerm : {
-                                DueDate : dueDate,
-                            //},   
-                            //billingInfo :{
-                                BillingEmail : billToEmail,
-                            //},
-                            //ccInfo : {
-                                ccEmail : billToEmailCc,
-                            //},
+                        {                            
+                            Number : invoiceNumber,
+                            //LogoUrl : AJS.$('#logoid').attr('src'),
+                            LogoUrl : 'https://www.angelleye.com/wp-content/uploads/2015/06/angelleye-logo-159x43.png',
+                            InvoiceDate : issueDate,
+                            Reference : reference,
+                            AllowPartialPayment : partialPayments,                                
+                            Note : notes,
+                            Terms : terms,
+                            addMemoDesc : addMemoDesc,
+                            MerchantMemo : memodesc,                            
+                            MinimumAmountDue :minimumDueAmount,                            
+                            DueDate : dueDate,                            
+                            BillingEmail : billToEmail,                            
+                            ccEmail : billToEmailCc,                           
                             itemArray : mainItemObject,
                             finalDiscountForInvoice : invoiceDiscObj,
                             ShippingCost : shippingAmount
@@ -477,12 +474,50 @@
                     $.ajax({ 
                         type: 'POST',
                         url: 'CreateAndSendInvoice.php',
+                        beforeSend: function () {
+                            AJS.$('#send_invoice').text('Processing...');
+                        },
+                        complete: function () {
+                            
+                        },
                         data: {
                             create_invoice_request : JSON.stringify(request)
                         },
                         dataType: "json",                        
                         success: function (result) {
-                           console.log(result);
+                            if(result.success == 'true'){
+                                AJS.$('#send_invoice').text('Complete');
+                                AJS.messages.success({
+                                    title: 'Success',
+                                    body: '<p> '+result.msg+' </p>'
+                                });                                
+                            }
+                            else if(result.success == 'successwithwarning'){
+                                AJS.$('#send_invoice').text('Complete');
+                                AJS.messages.info({
+                                    title: 'Success',
+                                    body: '<p> '+result.msg+' </p>'
+                                });
+                            }
+                            else if(result.success == 'false'){
+                                var name,field_details = '';      
+                                AJS.$('#send_invoice').text('Try Again');
+                                if('errors' in result.error){                                    
+                                    if ('name' in result.error.errors){
+                                        name = result.error.errors.name;
+                                    }
+                                    if ('details' in result.error.errors){
+                                        var details = result.error.errors.details;
+                                        AJS.$.each(details,function(index, item){
+                                            field_details += '<p><strong>'+item.field+' </strong>'+item.issue+'</p>';                                            
+                                        });
+                                    }
+                                }
+                                AJS.messages.error({
+                                    title: 'PayPal Error',
+                                    body: '<p> '+result.msg+'</p><p>'+name+'</p>'+field_details
+                                });                                
+                            }
                         }
                     });
                                         
@@ -523,7 +558,9 @@
                     var qty = parseInt(AJS.$(this).val());
                     var price = parseFloat(AJS.$(this).parent().next().find('input[id^="itemPrice_"]').val());
                     var tax=parseFloat(AJS.$(this).parent().next().next().find('input[id^="taxRate_"]').val());
-                    var amount = (qty * price)+tax;
+                    var amount = (qty * price);
+                    var temp_amount = ((amount*tax)/100);
+                    amount = amount + temp_amount;                    
                     AJS.$(this).parent().siblings('.grey-bg').find('input[name="basicAmt"]').val('$'+amount.toFixed(2));
                     total = total + amount;
                 });

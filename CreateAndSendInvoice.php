@@ -53,10 +53,10 @@ foreach ($requestArray['itemArray'] as $value) {
     $i++;
 }
 if($requestArray['finalDiscountForInvoice']['type'] == 'Percent' && $requestArray['finalDiscountForInvoice']['Amount'] > 0){
-    $request['finalDiscountForInvoice'] = array('Percent' => intval($requestArray['finalDiscountForInvoice']['Amount']));
+    $request['finalDiscountForInvoice'] = array('type' => 'Percent', 'Percent' => intval($requestArray['finalDiscountForInvoice']['Amount']));
 }
 if($requestArray['finalDiscountForInvoice']['type'] == 'Amount' && $requestArray['finalDiscountForInvoice']['Amount'] > 0){
-    $request['finalDiscountForInvoice'] = array('Amount' => array ('Currency' => 'USD',
+    $request['finalDiscountForInvoice'] = array('type' => 'Amount', 'Amount' => array ('Currency' => 'USD',
                                                                     'Value' => $requestArray['finalDiscountForInvoice']['Amount']
                                                             ));
 }
@@ -81,19 +81,20 @@ $request['merchantInfo'] = array(
     'BusinessName' => 'AngellEYE', // The merchant company business name. Maximum length is 100 characters.
 );
 
-//$requestData = array(
-//    'merchantInfo' => $merchantInfo,
-//    'billingInfo' => $requestArray['billingInfo'],
-//    'itemArray' => $requestArray['itemArray'],
-//    'finalDiscountForInvoice' => $requestArray['finalDiscountForInvoice'],
-//    'paymentTerm' => $requestArray['paymentTerm'],
-//    'invoiceData' => $requestArray['invoiceData'],
-//    'shippingCost' => ($requestArray['ShippingCost']['Amount'] > 0 ) ? $requestArray['ShippingCost'] : array(),
-//    'ccInfo' => $requestArray['ccInfo'],
-//    'MinimumAmountDue' => $requestArray['MinimumAmountDue']
-//);
-
 $returnArray = $PayPal->create_invoice($request);
-echo "<pre>";
-print_r($returnArray);
-exit;
+if(isset($returnArray['RESULT']) && $returnArray['RESULT'] == 'Success'){
+    $invoice_id = $returnArray['INVOICE']['id'];
+    $send_invoice = $PayPal->send_invoice($invoice_id);
+    if(isset($send_invoice['RESULT']) && $send_invoice['RESULT'] === 'Success'){
+        echo json_encode( array('success' =>'true','msg'=>'Inovice created and sent successfully.','invoice_id'=>$invoice_id));
+        exit;
+    }
+    else{
+        echo json_encode( array('success' =>'successwithwarning','msg'=>'Invoice created but failed to send.','invoice_id'=>$invoice_id));
+        exit;
+    }
+}
+else{
+    echo json_encode(array('success' =>'false','msg'=> 'Error creating PayPal Invoice.','error' => $returnArray));
+    exit;
+}
