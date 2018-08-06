@@ -266,8 +266,8 @@
                                 <div id="aui-message-bar" class="mt20"></div>                                
                                 <div class="aui-group aui-group-split">
                                     <div class="aui-item">
-                                        <button class="aui-button aui-button-primary" id="send_invoice" style="font-size: 15px">Send</button>                                        
-                                        <button class="aui-button" id="save_as_draft" style="font-size: 15px">Save as draft</button>
+                                        <button class="aui-button aui-button-primary aebutton_submit" data-buttontype="send_inoive" id="send_invoice" style="font-size: 15px">Send</button>                                        
+                                        <button class="aui-button aebutton_submit" id="save_as_draft" data-buttontype="save_as_draft" style="font-size: 15px">Save as draft</button>
                                     </div>
                                     <div class="aui-item">
                                     </div>
@@ -388,8 +388,11 @@
                     countFinalTotal(AJS.$('input[name="invDiscount"]').val());
                 });
                 
-                AJS.$(document).on('click','#send_invoice', function (e) {
+                AJS.$(document).on('click','.aebutton_submit', function (e) {
                     e.preventDefault();
+                    var button = AJS.$(this);
+                    var buttontype = button.attr('data-buttontype');
+                    var save_as_draft ='';
                     var invoiceNumber = AJS.$('#invoiceNumber').val();
                     var issueDate = AJS.$('#issueDate').val();
                     var reference = AJS.$('#reference').val();
@@ -416,6 +419,12 @@
                         allowTips = 'yes';
                     }
                     
+                    if(buttontype == 'send_inoive'){
+                        save_as_draft ='no';
+                    }
+                    else{
+                        save_as_draft='yes';
+                    }
                     var invDiscount = AJS.$("#invDiscount").val();
                     var invoiceDiscType = AJS.$("#invoiceDiscType").val();
                     var shippingAmount = AJS.$("#shippingAmount").val();
@@ -469,13 +478,14 @@
                             ccEmail : billToEmailCc,                           
                             itemArray : mainItemObject,
                             finalDiscountForInvoice : invoiceDiscObj,
-                            ShippingCost : shippingAmount
+                            ShippingCost : shippingAmount,
+                            save_as_draft : save_as_draft
                         };                                       
                     $.ajax({ 
                         type: 'POST',
                         url: 'CreateAndSendInvoice.php',
                         beforeSend: function () {
-                            AJS.$('#send_invoice').text('Processing...');
+                            button.text('Processing...');
                         },
                         complete: function () {
                             
@@ -486,14 +496,14 @@
                         dataType: "json",                        
                         success: function (result) {
                             if(result.success == 'true'){
-                                AJS.$('#send_invoice').text('Complete');
+                                button.text('Complete');
                                 AJS.messages.success({
                                     title: 'Success',
                                     body: '<p> '+result.msg+' </p>'
                                 });                                
                             }
                             else if(result.success == 'successwithwarning'){
-                                AJS.$('#send_invoice').text('Complete');
+                                button.text('Complete');
                                 AJS.messages.info({
                                     title: 'Success',
                                     body: '<p> '+result.msg+' </p>'
@@ -501,7 +511,7 @@
                             }
                             else if(result.success == 'false'){
                                 var name,field_details = '';      
-                                AJS.$('#send_invoice').text('Try Again');
+                                button.text('Try Again');
                                 if('errors' in result.error){                                    
                                     if ('name' in result.error.errors){
                                         name = result.error.errors.name;

@@ -84,17 +84,24 @@ $request['merchantInfo'] = array(
 $returnArray = $PayPal->create_invoice($request);
 if(isset($returnArray['RESULT']) && $returnArray['RESULT'] == 'Success'){
     $invoice_id = $returnArray['INVOICE']['id'];
-    $send_invoice = $PayPal->send_invoice($invoice_id);
-    if(isset($send_invoice['RESULT']) && $send_invoice['RESULT'] === 'Success'){
-        echo json_encode( array('success' =>'true','msg'=>'Inovice created and sent successfully.','invoice_id'=>$invoice_id));
-        exit;
+    if(isset($requestArray['save_as_draft']) && $requestArray['save_as_draft']  =='no'){
+        $send_invoice = $PayPal->send_invoice($invoice_id);
+        if(isset($send_invoice['RESULT']) && $send_invoice['RESULT'] === 'Success'){
+            echo json_encode( array('success' =>'true','msg'=>'Your invoice has been saved to your PayPal account.','invoice_id'=>$invoice_id));
+            exit;
+        }
+        else{
+            echo json_encode( array('success' =>'successwithwarning','msg'=>'Your invoice has been saved to your PayPal account.','invoice_id'=>$invoice_id));
+            exit;
+        }
     }
     else{
-        echo json_encode( array('success' =>'successwithwarning','msg'=>'Invoice created but failed to send.','invoice_id'=>$invoice_id));
+        echo json_encode( array('success' =>'true','msg'=>'Your invoice has been saved to your PayPal account.','invoice_id'=>$invoice_id));
         exit;
     }
+    
 }
 else{
-    echo json_encode(array('success' =>'false','msg'=> 'Error creating PayPal Invoice.','error' => $returnArray));
+    echo json_encode(array('success' =>'false','msg'=> 'Your invoice failed to be created.','error' => $returnArray));
     exit;
 }
