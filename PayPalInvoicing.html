@@ -372,6 +372,17 @@
                         });
                     });
                     
+                    AJS.$('input.taxRate').each(function() {
+                        AJS.$(this).rules("add", 
+                        {
+                            required: true,
+                            ppriceValidator:true,
+                            messages: {                                
+                                priceValidator:"Please enter a valid amount."
+                            }
+                        });
+                    });                    
+                    
                 });
 
                 AJS.$(document).on('click', '.remove_ae_row', function (e) {
@@ -635,7 +646,7 @@
                         },
                         'taxRate[0]': {
                             min: 0,
-                            priceValidator : true
+                            ppriceValidator : true
                         },
                         minimumDueAmount : {
                             priceValidator : true
@@ -675,7 +686,7 @@
                         },
                         'taxRate[0]': {
                             min: "Min Price is {0}",
-                            priceValidator : "Please enter  a valid amount."
+                            ppriceValidator : "Please enter  a valid amount."
                         },
                         minimumDueAmount : {
                             priceValidator : "Please enter  a valid amount."
