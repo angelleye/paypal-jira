@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/5.9.17/css/aui.min.css" media="all">
+    <script src="https://ac-getting-started.atlassian.net/atlassian-connect/all.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="//aui-cdn.atlassian.com/aui-adg/5.9.17/js/aui.min.js"></script>
+  </head>
+  <body class="aui-page-focused aui-page-focused-xlarge">
+    <div id="page">
+      <section id="content">
+        <header class="aui-page-header">
+          <div class="aui-page-header-inner">
+            <div class="aui-page-header-main">
+              <h2>PayPal For Jira configuration page</h2>
+              <p id="custom-message">This is an example configuration page for board ID: {{id}} with board type: {{type}}.</p>
+            </div>
+          </div>
+        </header>
+          <div class="aui-page-panel">
+            <div class="aui-page-panel-inner">
+                <section class="aui-page-panel-content">
+                    <form class="aui" id="aui-frm" enctype="multipart/form-data">
+                        <div class="aui-group">
+                            <div class="aui-item">
+                                <h3>Business Information</h3>
+                                <fieldset>                                    
+                                    <div class="field-group">
+                                        <label for="d-fname">First name<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="d-fname" name="d-fname" title="first name">                                        
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="d-fname">Last name<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="d-fname" name="d-fname" title="first name">                                        
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="d-fname">Company Name<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="d-fname" name="d-fname" title="first name">
+                                        <div class="description">Default width input of a required field</div>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="d-fname">Email Address<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="d-fname" name="d-fname" title="first name">
+                                        <div class="description">Default width input of a required field</div>
+                                    </div>                                    
+                                    <div class="field-group">
+                                        <label for="d-fname">Phone Number<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="d-fname" name="d-fname" title="first name">
+                                        <div class="description">Default width input of a required field</div>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="multiselect">Address</label>
+                                        <textarea class="textarea" rows="3" cols="10" name="licenseKey" id="licenseKey"></textarea>
+                                        <div class="description">Multi select description</div>
+                                    </div>                                                                        
+                                </fieldset>
+                            </div>                            
+                            <div class="aui-item">                                
+                            </div>
+                        </div>
+                        <div class="aui-group">
+                            <div class="aui-item">
+                                <h3>Default Value Setters</h3>
+                                <fieldset>
+                                <div class="field-group">
+                                    <label for="d-fname">Shipping Amount<span class="aui-icon icon-required"> required</span></label>
+                                    <input class="text" type="text" id="d-fname" name="d-fname" title="first name">
+                                    <div class="description">Default width input of a required field</div>
+                                </div>
+                                <div class="field-group">
+                                    <label for="d-fname">Tax Rate<span class="aui-icon icon-required"> required</span></label>
+                                    <input class="text short-field" type="text" id="d-fname" name="d-fname" title="first name" placeholder="Name">
+                                    <input class="text short-field" type="text" id="d-fname" name="d-fname" title="first name" placeholder="Amount">%
+                                    <div class="description">Default width input of a required field</div>
+                                </div>                                
+                                <div class="field-group">
+                                    <label for="multiselect">Note to Recipient</label>
+                                    <textarea class="textarea" rows="3" cols="10" name="licenseKey" id="licenseKey"></textarea>
+                                    <div class="description">Multi select description</div>
+                                </div>
+                                <div class="field-group">
+                                    <label for="multiselect">Terms and Conditions</label>
+                                    <textarea class="textarea" rows="3" cols="10" name="licenseKey" id="licenseKey"></textarea>
+                                    <div class="description">Multi select description</div>
+                                </div>
+                                </fieldset>
+                                <div class="buttons-container">
+                                    <div class="buttons">
+                                        <input class="button submit" type="submit" value="Save" id="d-save-btn1">
+                                        <a class="cancel" href="#">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aui-item"></div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+          </div>
+      </section>
+    </div>
+  </body>
+</html>
