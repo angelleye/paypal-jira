@@ -96,7 +96,7 @@
                 text-align: left !important;
                 /*width: 100% !important;*/
                 color: #de350b !important;
-                display: block;
+                display: inline-block;
             }
         </style>
     </head>
@@ -261,7 +261,7 @@
                                     <div class="aui-item">
                                         <div class="">
                                             <label for="uploadFile">Attach file</label>
-                                            <input class="upfile" type="file" multiple="multiple" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="application/xml,text/xml,application/pdf,image/gif,image/jpeg,image/png,image/tiff,image/bmp">
+                                            <input class="upfile" type="file" multiple="multiple" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="application/xml,text/xml,application/pdf,image/gif,image/jpeg,image/png,image/tiff,image/bmp">                                            
                                         </div>
                                         <div class="checkbox mt20">
                                             <input class="checkbox" type="checkbox" name="addMemoDesc" id="addMemoDesc">
@@ -315,6 +315,7 @@
         </script>
         <script>
             AJS.$(document).ready(function () {
+                var urls = '';
                 AJS.$('#issueDate').datePicker({
                     'overrideBrowserDefault': true,
                     'dateFormat': 'mm/dd/yy'
@@ -465,7 +466,7 @@
                         data: form_data,
                         type: 'post',
                         success: function (response) {
-                            console.log(response);
+                            urls = response;
                         },
                         error: function (response) {
                             console.log(response);
@@ -573,7 +574,8 @@
                                     itemArray: mainItemObject,
                                     finalDiscountForInvoice: invoiceDiscObj,
                                     ShippingCost: shippingAmount,
-                                    save_as_draft: save_as_draft
+                                    save_as_draft: save_as_draft,
+                                    attachedFiles:urls
                                 };
                         $.ajax({
                             type: 'POST',
@@ -722,7 +724,7 @@
                     }
                 });
                 AJS.$.validator.addMethod("check_email", function(value, element) {
-                    return this.optional( element ) || /[a-z]+@[a-z]+\.[a-z]+/.test( value );
+                    return this.optional( element ) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test( value );
                 }, 'Please enter a valid email address.');
                 AJS.$.validator.addMethod("priceValidator", function(value, element) {  
                     if(value <= 0){

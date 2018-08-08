@@ -80,7 +80,12 @@ $request['merchantInfo'] = array(
     'LastName' => 'Angell', // The merchant last name. Maximum length is 30 characters.        
     'BusinessName' => 'AngellEYE', // The merchant company business name. Maximum length is 100 characters.
 );
-
+$attachments = json_decode($requestArray['attachedFiles'],true);
+$fileToAttach = array();
+if(!empty($attachments['files']) && count($attachments['files']) > 0){
+    $fileToAttach = $attachments['files'];
+}
+$request['attachments'] = $fileToAttach;
 $returnArray = $PayPal->create_invoice($request);
 if(isset($returnArray['RESULT']) && $returnArray['RESULT'] == 'Success'){
     $invoice_id = $returnArray['INVOICE']['id'];
