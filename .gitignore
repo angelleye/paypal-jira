@@ -64,3 +64,10 @@ typings/
 
 #compose vendor folder
 vendor/*
+
+# exclude everything
+uploads/*
+
+# exception to the rule
+!somefolder/.gitkeep 
+
