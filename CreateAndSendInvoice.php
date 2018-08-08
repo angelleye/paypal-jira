@@ -46,7 +46,7 @@ foreach ($requestArray['itemArray'] as $value) {
         $request['itemArray'][$i]['Description'] = trim($value['Description']);
     }    
     $request['itemArray'][$i]['Quantity'] = intval(trim($value['Quantity']));
-    $request['itemArray'][$i]['UnitPrice'] = number_format($value['UnitPrice'],2);
+    $request['itemArray'][$i]['UnitPrice'] = $value['UnitPrice'];
     if(isset($value['Tax']['Name']) && !empty($value['Tax']['Name']) && isset($value['Tax']['Percent']) && !empty($value['Tax']['Percent'])){
         $request['itemArray'][$i]['Tax'] = $value['Tax'];
     }
