@@ -64,5 +64,3 @@ typings/
 
 #compose vendor folder
 vendor/*
-!uploads/
-uploads/*
