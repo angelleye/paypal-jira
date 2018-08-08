@@ -176,7 +176,7 @@
                                                     <td headers="basic-price"><input class="text short-field itemPrice" type="text" id="itemPrice_0" name="itemPrice[0]" title="Price" value="0.00"></td>
                                                     <td headers="basic-tax">
                                                         <input class="text short-field" type="text" id="taxName_0" name="taxName" title="Tax" placeholder="Name">
-                                                        <input class="text short-field itemPrice" type="text" id="taxRate_0" name="taxRate[0]" title="Tax" placeholder="Amount" value="0.00"> %
+                                                        <input class="text short-field taxRate" type="text" id="taxRate_0" name="taxRate[0]" title="Tax" placeholder="Amount" value="0.00"> %
                                                     </td>
                                                     <td headers="basic-amt" class="grey-bg"><input type="text" id="basicAmt_0" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>
                                                     <td></td>
@@ -559,7 +559,7 @@
                                 {
                                     Number: invoiceNumber,
                                     //LogoUrl : AJS.$('#logoid').attr('src'),
-                                    LogoUrl: 'https://www.angelleye.com/wp-content/uploads/2015/06/angelleye-logo-159x43.png',
+                                    LogoUrl: 'https://www.paypalobjects.com/webstatic/i/logo/rebrand/ppcom.svg',
                                     InvoiceDate: issueDate,
                                     Reference: reference,
                                     AllowPartialPayment: partialPayments,
@@ -628,7 +628,7 @@
                     else{                        
                         AJS.$([document.documentElement, document.body]).animate({
                             scrollTop: $("#invoiceNumber").offset().top
-                        }, 2000);
+                        }, 1000);
                     }
                 });
 
@@ -668,8 +668,7 @@
                         'itemPrice[0]': {
                             priceValidator: true
                         },
-                        'taxRate[0]': {
-                            min: 0,
+                        'taxRate[0]': {                           
                             ppriceValidator : true
                         },
                         minimumDueAmount : {
@@ -683,43 +682,43 @@
                         }
                     },
                     messages: {
-                        reference: {                           
-                            maxlength: 'Maxlength is {0}'
+                        reference: {
+                            maxlength: 'Maxlength is {0}.'
                         },
                         invoiceNumber:{
-                            maxlength: "Invoice no. required"
+                            maxlength: "Maxlength  is {0}."
                         },
                         billToEmail: {
-                            required: "Email address is required",
+                            required: "Email address is required.",
                             check_email: "Please enter a valid email address.",                            
-                            maxlength: "Minimum length is {0}"
+                            maxlength: "Maxlength length is {0}."
                         },
                         billToEmailCc: {
-                            check_email: "Please enter a valid email address.",                            
-                            maxlength: "Minimum length is {0}"
+                            check_email: "Please enter a valid email address.",
+                            maxlength: "Maxlength length is {0}."
                         },
                         'itemName[0]': {
-                            required:"Please enter valid item name."
+                            required:"Please enter a valid item name."
                         },
                         'itemQty[0]': {
-                            required: "Quantity is required",
-                            min: "Min qty is {0}",                            
+                            required: "Quantity is required.",
+                            min: "Min qty is {0}."
                         },
                         'itemPrice[0]': {                           
                             priceValidator : "Please enter a valid amount."
                         },
                         'taxRate[0]': {
-                            min: "Min Price is {0}",
-                            ppriceValidator : "Please enter  a valid amount."
+                            min: "Min Price is {0}.",
+                            ppriceValidator : "Please enter a valid amount."
                         },
                         minimumDueAmount : {
-                            priceValidator : "Please enter  a valid amount."
+                            priceValidator : "Please enter a valid amount."
                         },
                         invDiscount:{
-                            ppriceValidator : "Please enter  a valid amount."
+                            ppriceValidator : "Please enter a valid amount."
                         },
                         shippingAmount:{
-                            ppriceValidator : "Please enter  a valid amount."
+                            ppriceValidator : "Please enter a valid amount."
                         }
                     }
                 });
@@ -747,11 +746,16 @@
                 } else if (discountBase == 'dollar') {
                     discountAmt = parseFloat(val);
                 }
+                if(isNaN(discountAmt)){
+                    discountAmt = 0.00;
+                }
                 AJS.$('.invoiceDiscountAmount').text('$' + discountAmt.toFixed(2));
 
                 var shippingAmount = parseFloat(AJS.$('input[name="shippingAmount"]').val());
-                if (shippingAmount == '')
-                    shippingAmount = 0;
+                if (isNaN(shippingAmount))
+                {
+                    shippingAmount = 0.00;
+                }
                 AJS.$('.shippingAmountTd').text('$' + shippingAmount.toFixed(2));
 
                 var finalTotal = total - discountAmt + shippingAmount;
@@ -764,10 +768,13 @@
                 AJS.$('input[id^="itemQty_"]').each(function () {
                     var qty = parseInt(AJS.$(this).val());
                     var price = parseFloat(AJS.$(this).parent().next().find('input[id^="itemPrice_"]').val());
-                    var tax = parseFloat(AJS.$(this).parent().next().next().find('input[id^="taxRate_"]').val());
+                    var tax = parseFloat(AJS.$(this).parent().next().next().find('input[id^="taxRate_"]').val());                    
                     var amount = (qty * price);
                     var temp_amount = ((amount * tax) / 100);
                     amount = amount + temp_amount;
+                    if(isNaN(amount)){
+                        amount = 0.00;
+                    }
                     AJS.$(this).parent().siblings('.grey-bg').find('input[name="basicAmt"]').val('$' + amount.toFixed(2));
                     total = total + amount;
                 });

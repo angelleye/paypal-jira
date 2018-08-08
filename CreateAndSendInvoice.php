@@ -12,12 +12,12 @@ if (isset($_POST['create_invoice_request'])) {
 }
 $request = array();
 $request['invoiceData'] = array(
-    'Number' => (isset($requestArray['Number'])) ? $requestArray['Number'] : '',
+    'Number' => (isset($requestArray['Number'])) ? trim($requestArray['Number']) : '',
     'LogoUrl' => (isset($requestArray['LogoUrl'])) ? $requestArray['LogoUrl'] : '',
     'InvoiceDate' => (isset($requestArray['InvoiceDate'])) ? date('Y-m-d Z', strtotime($requestArray['InvoiceDate'])) : '',
-    'Reference' => (isset($requestArray['Reference'])) ? $requestArray['Reference'] : '',
-    'Note' => (isset($requestArray['Note'])) ? $requestArray['Note'] : '',
-    'Terms' => (isset($requestArray['Terms'])) ? $requestArray['Terms'] : '',
+    'Reference' => (isset($requestArray['Reference'])) ? trim($requestArray['Reference']) : '',
+    'Note' => (isset($requestArray['Note'])) ? trim($requestArray['Note']) : '',
+    'Terms' => (isset($requestArray['Terms'])) ? trim($requestArray['Terms']) : '',
     'MerchantMemo' => (isset($requestArray['MerchantMemo']) && $requestArray['addMemoDesc'] == 'yes') ? $requestArray['MerchantMemo'] : '',
     'AllowPartialPayment' => (isset($requestArray['AllowPartialPayment']) && $requestArray['AllowPartialPayment'] == 'yes') ? true : '',
 );
@@ -36,20 +36,20 @@ if(!empty($paymentTerm['DueDate'])){
     $request['paymentTerm'] = $paymentTerm;
 }
 
-$request['billingInfo']['Email'] = isset($requestArray['BillingEmail']) ? $requestArray['BillingEmail'] : '';
-$request['ccInfo']['Email'] = isset($requestArray['ccEmail']) ? $requestArray['ccEmail'] : '';
+$request['billingInfo']['Email'] = isset($requestArray['BillingEmail']) ? trim($requestArray['BillingEmail']) : '';
+$request['ccInfo']['Email'] = isset($requestArray['ccEmail']) ? trim($requestArray['ccEmail']) : '';
 $request['itemArray'] = array();
 $i=0;
 foreach ($requestArray['itemArray'] as $value) {
-    $request['itemArray'][$i]['Name'] = $value['Name'];
+    $request['itemArray'][$i]['Name'] = trim($value['Name']);
     if(isset($value['Description']) && !empty($value['Description'])){
-        $request['itemArray'][$i]['Description'] = $value['Description'];
+        $request['itemArray'][$i]['Description'] = trim($value['Description']);
     }    
-    $request['itemArray'][$i]['Quantity'] = $value['Quantity'];
-    $request['itemArray'][$i]['UnitPrice'] = $value['UnitPrice'];
+    $request['itemArray'][$i]['Quantity'] = intval(trim($value['Quantity']));
+    $request['itemArray'][$i]['UnitPrice'] = number_format($value['UnitPrice'],2);
     if(isset($value['Tax']['Name']) && !empty($value['Tax']['Name']) && isset($value['Tax']['Percent']) && !empty($value['Tax']['Percent'])){
-        $request['itemArray'][$i]['Tax'] = $value['Tax'];        
-    } 
+        $request['itemArray'][$i]['Tax'] = $value['Tax'];
+    }
     $i++;
 }
 if($requestArray['finalDiscountForInvoice']['type'] == 'Percent' && $requestArray['finalDiscountForInvoice']['Amount'] > 0){
@@ -57,14 +57,14 @@ if($requestArray['finalDiscountForInvoice']['type'] == 'Percent' && $requestArra
 }
 if($requestArray['finalDiscountForInvoice']['type'] == 'Amount' && $requestArray['finalDiscountForInvoice']['Amount'] > 0){
     $request['finalDiscountForInvoice'] = array('type' => 'Amount', 'Amount' => array ('Currency' => 'USD',
-                                                                    'Value' => $requestArray['finalDiscountForInvoice']['Amount']
+                                                                    'Value' => number_format($requestArray['finalDiscountForInvoice']['Amount'],2)
                                                             ));
 }
 if(isset($requestArray['ShippingCost']) && $requestArray['ShippingCost'] > 0 ){
     $request['shippingCost']['type'] = 'Amount';
     $request['shippingCost']['Currency'] = array(
                 'Currency' => 'USD',
-                'Value' => $requestArray['ShippingCost']
+                'Value' => number_format($requestArray['ShippingCost'],2)
             );
 }
 $configArray = array(
