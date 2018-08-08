@@ -114,7 +114,7 @@
                 <div class="aui-page-panel">
                     <div class="aui-page-panel-inner">
                         <section class="aui-page-panel-content">
-                            <form class="aui" id="aui-frm">
+                            <form class="aui" id="aui-frm" enctype="multipart/form-data">
                                 <div class="aui-group">
                                     <div class="aui-item">
                                         <img src="images/your-logo-here.png" height="150" width="150" id="logoid">
@@ -450,6 +450,28 @@
                     countFinalTotal(AJS.$('input[name="invDiscount"]').val());
                 });
 
+                AJS.$(document).on('change', '#uploadAttachment', function (e) {
+                    var form_data = new FormData();
+                    var ins = document.getElementById('uploadAttachment').files.length;
+                    for (var x = 0; x < ins; x++) {
+                        form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
+                    }
+                    AJS.$.ajax({
+                        url: 'uploads.php', // point to server-side PHP script 
+                        dataType: 'text', // what to expect back from the PHP script
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        }
+                    });
+                });
                 AJS.$(document).on('click', '.aebutton_submit', function (e) {
                     e.preventDefault();
                     if (AJS.$("#aui-frm").valid()) {
