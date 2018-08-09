@@ -234,6 +234,7 @@
                                                         </td>                                                        
                                                         <td class="grey-bg shippingAmountTd">$0.00</td>
                                                     </tr>
+                                                    <tr class="dynamic_tax" id="tax_tr_0"></tr>
                                                     <tr class="grey-bg">
                                                         <th colspan="3">Total</th>                                                        
                                                         <td class="finalTotal">$0.00 USD</td>
@@ -342,6 +343,10 @@
                     $html += '</tr>';
 
                     AJS.$($html).insertAfter($parentTR);
+                    var dynamic_tax_count = AJS.$('.dynamic_tax').length;
+                    var parent_dynamic_tax = AJS.$('#tax_tr_'+(dynamic_tax_count-1));
+                    var html_dynamic_tax = '<tr class="dynamic_tax" id="tax_tr_'+dynamic_tax_count+'"></tr>';
+                    AJS.$(html_dynamic_tax).insertAfter(parent_dynamic_tax);
                     AJS.$('input.itemName').each(function() {                        
                         AJS.$(this).rules("add", 
                         {
@@ -757,26 +762,35 @@
                     shippingAmount = 0.00;
                 }
                 AJS.$('.shippingAmountTd').text('$' + shippingAmount.toFixed(2));
-
-                var finalTotal = total - discountAmt + shippingAmount;
+                var taxs = 0;
+                AJS.$('.tax_to_add').each(function () {                   
+                    taxs = taxs + parseFloat(AJS.$(this).html());
+                });  
+                
+                var finalTotal = total - discountAmt + shippingAmount + taxs;
 
                 AJS.$('.finalTotal').text('$' + finalTotal.toFixed(2) + ' USD');
             }
 
             function countSubTotal() {
                 var total = 0;
+                var i = 0;
                 AJS.$('input[id^="itemQty_"]').each(function () {
                     var qty = parseInt(AJS.$(this).val());
                     var price = parseFloat(AJS.$(this).parent().next().find('input[id^="itemPrice_"]').val());
-                    var tax = parseFloat(AJS.$(this).parent().next().next().find('input[id^="taxRate_"]').val());                    
+                    var tax = parseFloat(AJS.$(this).parent().next().next().find('input[id^="taxRate_"]').val());
+                    var taxName = AJS.$(this).parent().next().next().find('input[id^="taxName"]').val();
                     var amount = (qty * price);
-                    var temp_amount = ((amount * tax) / 100);
-                    amount = amount + temp_amount;
+                    var temp_amount = ((amount * tax) / 100);                    
                     if(isNaN(amount)){
                         amount = 0.00;
                     }
+                    if(temp_amount > 0 || isNaN(temp_amount)){                        
+                        AJS.$('#tax_tr_'+i).html('<td colspan="3"><b>Tax </b>'+taxName+'</td><td>$<span class="tax_to_add">'+temp_amount+'</span></td>');
+                    }
                     AJS.$(this).parent().siblings('.grey-bg').find('input[name="basicAmt"]').val('$' + amount.toFixed(2));
-                    total = total + amount;
+                    total = total + amount;                    
+                    i++;
                 });
                 AJS.$('.itemSubTotal').text('$' + total.toFixed(2));
                 countFinalTotal(AJS.$('input[name="invDiscount"]').val());
