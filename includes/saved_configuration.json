@@ -1,0 +1,13 @@
+{
+    "fname": "Tejas",
+    "lname": "Mehta",
+    "company_name": "Company name",
+    "email_address": "tejasm@itpath.com",
+    "phone_number": "8866238893",
+    "address": "Address for the business information",
+    "shipping_amount": "10",
+    "tax_name": "GST",
+    "tax_amount": "15",
+    "licenseKey": "Note ",
+    "terms_conditions": "terms"
+}
