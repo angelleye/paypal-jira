@@ -91,8 +91,13 @@
                                     <label for="terms_conditions">Terms and Conditions</label>
                                     <textarea class="textarea" rows="3" cols="10" name="terms_conditions" id="terms_conditions" tabindex="11"></textarea>
                                 </div>
+                                <div class="field-group">
+                                    <label for="uploadFile">Logo for in invoice</label>
+                                    <input class="upfile" type="file" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="image/jpeg,image/png">
+                                    <input type="hidden" name="logo_url" id="logo_url" />
+                                </div>
                                 </fieldset>
-                                <div id="aui-message-bar" style="margin-top: 20px"></div>  
+                                <div id="aui-message-bar" style="margin-top: 20px"></div>
                                 <div class="buttons-container">
                                     <div class="buttons">
                                         <input class="button submit" type="submit" value="Save" id="save">
@@ -110,6 +115,33 @@
     </div>
     <script>
         AJS.$(document).ready(function () {
+            var urls = '';
+            AJS.$(document).on('change', '#uploadAttachment', function () {
+                    var form_data = new FormData();
+                    var ins = document.getElementById('uploadAttachment').files.length;
+                    for (var x = 0; x < ins; x++) {
+                        form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
+                    }
+                    AJS.$.ajax({
+                        url: 'uploads.php', // point to server-side PHP script 
+                        dataType: 'json', // what to expect back from the PHP script
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                            urls = response;                            
+                            AJS.$.each(urls.files,function(index,value){
+                                console.log(value.url);
+                                AJS.$('#logo_url').val(value.url);
+                            });
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        }
+                    });
+            });                
             AJS.$(document).on('click', '#save', function (e) {
                 e.preventDefault();
                 if (AJS.$("#aui-frm").valid()) {

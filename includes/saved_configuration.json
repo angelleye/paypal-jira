@@ -1,13 +1,14 @@
 {
-    "fname": "Tejas",
-    "lname": "Mehta",
-    "company_name": "Company name",
-    "email_address": "tejasm@itpath.com",
+    "fname": "tejas",
+    "lname": "mehta",
+    "company_name": "company name",
+    "email_address": "tejasm@itpahtsolutions.co.in",
     "phone_number": "8866238893",
-    "address": "Address for the business information",
-    "shipping_amount": "10",
+    "address": " \r\nAddress for Business information ",
+    "shipping_amount": "15",
     "tax_name": "GST",
-    "tax_amount": "15",
-    "licenseKey": "Note ",
-    "terms_conditions": "terms"
+    "tax_amount": "2.5",
+    "licenseKey": "This is note to receipent",
+    "terms_conditions": "\r\nThis is terms and conditions\r\n",
+    "logo_url": "http:\/\/localhost\/paypal-jira\/uploads\/1533906850_your-logo-here.png"
 }
