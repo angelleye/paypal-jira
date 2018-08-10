@@ -331,6 +331,13 @@
                             AJS.$('#shippingAmount').val(parseFloat(config.shipping_amount).toFixed(2));
                             AJS.$('#terms').val(AJS.$.trim(config.terms_conditions));
                             AJS.$('#notes').val(AJS.$.trim(config.note_to_recipient));
+                            AJS.$('input[name="taxName"]').each(function () {
+                                AJS.$(this).val(config.tax_name);
+                            });
+                            AJS.$('input[id^="taxRate"]').each(function () {
+                                AJS.$(this).val(config.tax_amount);
+                            });
+                            countSubTotal();
                         }
                         else if(response.success === 'false'){
                             alert('Error fetching confuguration data.');
