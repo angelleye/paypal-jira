@@ -84,8 +84,8 @@
                                     <input class="text short-field" type="number" id="tax_amount" name="tax_amount" title="tax amount" placeholder="Amount" min="0" max="100" step="0.01" tabindex="9">%
                                 </div>                                
                                 <div class="field-group">
-                                    <label for="multiselect">Note to Recipient</label>
-                                    <textarea class="textarea" rows="3" cols="10" name="licenseKey" id="licenseKey" tabindex="10"></textarea>
+                                    <label for="note_to_recipient">Note to Recipient</label>
+                                    <textarea class="textarea" rows="3" cols="10" name="note_to_recipient" id="note_to_recipient" tabindex="10"></textarea>
                                 </div>
                                 <div class="field-group">
                                     <label for="terms_conditions">Terms and Conditions</label>
@@ -132,8 +132,7 @@
                         type: 'post',
                         success: function (response) {
                             urls = response;                            
-                            AJS.$.each(urls.files,function(index,value){
-                                console.log(value.url);
+                            AJS.$.each(urls.files,function(index,value){                                
                                 AJS.$('#logo_url').val(value.url);
                             });
                         },
