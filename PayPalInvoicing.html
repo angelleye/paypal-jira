@@ -378,11 +378,15 @@
                     $html += '<td style="cursor:pointer" class="remove_ae_row" data-rowNumber="' + row_count + '" id="remove_ae_row_' + row_count + '"><span class="aui-icon aui-icon-small aui-iconfont-cross-circle"></span></td>';
                     $html += '</tr>';
 
-                    AJS.$($html).insertAfter($parentTR);
+                    AJS.$($html).insertAfter($parentTR);					
+                    AJS.$('#taxName_'+row_count).val(config.tax_name);
+                    AJS.$('#taxRate_'+row_count).val(config.tax_amount);
+
                     var dynamic_tax_count = AJS.$('.dynamic_tax').length;
                     var parent_dynamic_tax = AJS.$('#tax_tr_'+(dynamic_tax_count-1));
                     var html_dynamic_tax = '<tr class="dynamic_tax" id="tax_tr_'+dynamic_tax_count+'"></tr>';
                     AJS.$(html_dynamic_tax).insertAfter(parent_dynamic_tax);
+
                     AJS.$('input.itemName').each(function() {                        
                         AJS.$(this).rules("add", 
                         {
@@ -414,7 +418,7 @@
                         });
                     });
                     
-                    AJS.$('input.taxRate').each(function() {
+                    AJS.$('input.taxRate').each(function() {                        
                         AJS.$(this).rules("add", 
                         {
                             required: true,
@@ -423,8 +427,9 @@
                                 priceValidator:"Please enter a valid amount."
                             }
                         });
-                    });                    
-                    
+                    });  
+                   
+                    countSubTotal();
                 });
 
                 AJS.$(document).on('click', '.remove_ae_row', function (e) {
@@ -599,8 +604,7 @@
                         var request =
                                 {
                                     Number: invoiceNumber,
-                                    //LogoUrl : AJS.$('#logoid').attr('src'),
-                                    LogoUrl: 'https://www.paypalobjects.com/webstatic/i/logo/rebrand/ppcom.svg',
+                                    LogoUrl : AJS.$('#logoid').attr('src'),                                    
                                     InvoiceDate: issueDate,
                                     Reference: reference,
                                     AllowPartialPayment: partialPayments,
