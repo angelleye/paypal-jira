@@ -382,7 +382,7 @@
                     AJS.$('#taxName_'+row_count).val(config.tax_name);
                     AJS.$('#taxRate_'+row_count).val(config.tax_amount);
 
-                    var dynamic_tax_count = AJS.$('.dynamic_tax').length;
+                    var dynamic_tax_count = AJS.$('.dynamic_tax').length;                    
                     var parent_dynamic_tax = AJS.$('#tax_tr_'+(dynamic_tax_count-1));
                     var html_dynamic_tax = '<tr class="dynamic_tax" id="tax_tr_'+dynamic_tax_count+'"></tr>';
                     AJS.$(html_dynamic_tax).insertAfter(parent_dynamic_tax);
@@ -421,7 +421,6 @@
                     AJS.$('input.taxRate').each(function() {                        
                         AJS.$(this).rules("add", 
                         {
-                            required: true,
                             ppriceValidator:true,
                             messages: {                                
                                 priceValidator:"Please enter a valid amount."
@@ -825,8 +824,11 @@
                     if(isNaN(amount)){
                         amount = 0.00;
                     }
-                    if(temp_amount > 0 || isNaN(temp_amount)){                        
-                        AJS.$('#tax_tr_'+i).html('<td colspan="3"><b>Tax </b>'+taxName+'</td><td>$<span class="tax_to_add">'+temp_amount+'</span></td>');
+                    if(tax > 0 && $.isNumeric(tax)){
+                        AJS.$('#tax_tr_'+i).html('<td colspan="3"><b>Tax ('+tax+'%) </b>'+taxName+'</td><td>$<span class="tax_to_add">'+parseFloat(temp_amount).toFixed(2)+'</span></td>');
+                    }
+                    else{                        
+                        AJS.$('#tax_tr_'+i).html('');
                     }
                     AJS.$(this).parent().siblings('.grey-bg').find('input[name="basicAmt"]').val('$' + amount.toFixed(2));
                     total = total + amount;                    
