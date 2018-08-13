@@ -378,6 +378,9 @@
                     $html += '</tr>';
 
                     AJS.$($html).insertAfter($parentTR);
+                    console.log(config);
+                    AJS.$('#taxName_'+row_count).val(config.tax_name);
+                    AJS.$('#taxRate_'+row_count).val(config.tax_amount);
                     AJS.$('input.itemName').each(function() {                        
                         AJS.$(this).rules("add", 
                         {
@@ -409,7 +412,7 @@
                         });
                     });
                     
-                    AJS.$('input.taxRate').each(function() {
+                    AJS.$('input.taxRate').each(function() {                        
                         AJS.$(this).rules("add", 
                         {
                             required: true,
@@ -418,8 +421,9 @@
                                 priceValidator:"Please enter a valid amount."
                             }
                         });
-                    });                    
-                    
+                    });  
+                   
+                    countSubTotal();
                 });
 
                 AJS.$(document).on('click', '.remove_ae_row', function (e) {
@@ -594,8 +598,7 @@
                         var request =
                                 {
                                     Number: invoiceNumber,
-                                    //LogoUrl : AJS.$('#logoid').attr('src'),
-                                    LogoUrl: 'https://www.paypalobjects.com/webstatic/i/logo/rebrand/ppcom.svg',
+                                    LogoUrl : AJS.$('#logoid').attr('src'),                                    
                                     InvoiceDate: issueDate,
                                     Reference: reference,
                                     AllowPartialPayment: partialPayments,
