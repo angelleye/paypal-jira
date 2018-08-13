@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/5.9.17/css/aui.min.css" media="all">
+    <script src="https://ac-getting-started.atlassian.net/atlassian-connect/all.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="//aui-cdn.atlassian.com/aui-adg/5.9.17/js/aui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <style type="text/css">
+        form.aui .checkbox .error,
+        form.aui .field-group .error,
+        form.aui .group .error,
+        form.aui .radio .error{
+            display: inline-block !important;
+            width: 100%;
+        }
+        label.error{
+            clear: none !important;
+            text-align: left !important;                
+            color: #de350b !important;                
+        }
+    </style>
+  </head>
+  <body class="aui-page-focused aui-page-focused-xlarge">
+    <div id="page">
+      <section id="content">
+        <header class="aui-page-header">
+          <div class="aui-page-header-inner">
+            <div class="aui-page-header-main">
+              <h2>PayPal For Jira configuration page</h2>
+              <p id="custom-message">This is an example configuration page for board ID: {{id}} with board type: {{type}}.</p>
+            </div>
+          </div>
+        </header>
+          <div class="aui-page-panel">
+            <div class="aui-page-panel-inner">
+                <section class="aui-page-panel-content">
+                    <form class="aui" id="aui-frm" enctype="multipart/form-data">
+                        <div class="aui-group">
+                            <div class="aui-item">
+                                <h3>Business Information</h3>
+                                <fieldset>                                    
+                                    <div class="field-group">
+                                        <label for="fname">First name<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="fname" name="fname" title="first name" autocomplete="off" tabindex="1" autofocus>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="lname">Last name<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="lname" name="lname" title="last name" autocomplete="off" tabindex="2">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="company_name">Company Name<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="company_name" name="company_name" title="company name" autocomplete="off" tabindex="3">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="email_address">Email Address<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="email_address" name="email_address" title="first name" autocomplete="off" tabindex="4">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="phone_number">Phone Number<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="phone_number" name="phone_number" title="phone number" autocomplete="off" tabindex="5">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="address">Address</label>
+                                        <textarea class="textarea" rows="3" cols="10" name="address" id="licenseKey" tabindex="6"></textarea>
+                                    </div>                                                                        
+                                </fieldset>
+                            </div>                            
+                            <div class="aui-item">                                
+                            </div>
+                        </div>
+                        <div class="aui-group">
+                            <div class="aui-item">
+                                <h3>Default Value Setters</h3>
+                                <fieldset>
+                                <div class="field-group">
+                                    <label for="shipping_amount">Shipping Amount</label>
+                                    <input class="text" type="text" id="shipping_amount" name="shipping_amount" title="shipping amount" tabindex="7">
+                                </div>
+                                <div class="field-group">
+                                    <label for="tax">Tax Rate</label>
+                                    <input class="text short-field" type="text" id="tax_name" name="tax_name" title="tax name" placeholder="Name" tabindex="8">
+                                    <input class="text short-field" type="number" id="tax_amount" name="tax_amount" title="tax amount" placeholder="Amount" min="0" max="100" step="0.01" tabindex="9">%
+                                </div>                                
+                                <div class="field-group">
+                                    <label for="note_to_recipient">Note to Recipient</label>
+                                    <textarea class="textarea" rows="3" cols="10" name="note_to_recipient" id="note_to_recipient" tabindex="10"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <label for="terms_conditions">Terms and Conditions</label>
+                                    <textarea class="textarea" rows="3" cols="10" name="terms_conditions" id="terms_conditions" tabindex="11"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <label for="uploadFile">Logo for in invoice</label>
+                                    <input class="upfile" type="file" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="image/jpeg,image/png">
+                                    <input type="hidden" name="logo_url" id="logo_url" />
+                                </div>
+                                </fieldset>
+                                <div id="aui-message-bar" style="margin-top: 20px"></div>
+                                <div class="buttons-container">
+                                    <div class="buttons">
+                                        <input class="button submit" type="submit" value="Save" id="save">
+                                        <a class="cancel" href="#">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aui-item"></div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+          </div>
+      </section>
+    </div>
+    <script>
+        AJS.$(document).ready(function () {
+            var urls = '';
+            AJS.$(document).on('change', '#uploadAttachment', function () {
+                    var form_data = new FormData();
+                    var ins = document.getElementById('uploadAttachment').files.length;
+                    for (var x = 0; x < ins; x++) {
+                        form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
+                    }
+                    AJS.$.ajax({
+                        url: 'uploads.php', // point to server-side PHP script 
+                        dataType: 'json', // what to expect back from the PHP script
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                            urls = response;                            
+                            AJS.$.each(urls.files,function(index,value){                                
+                                AJS.$('#logo_url').val(value.url);
+                            });
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        }
+                    });
+            });                
+            AJS.$(document).on('click', '#save', function (e) {
+                e.preventDefault();
+                if (AJS.$("#aui-frm").valid()) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'create_json.php',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        data: {
+                            form_data : AJS.$("#aui-frm").serialize()
+                        },
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.success == 'true') {
+                                AJS.messages.success({
+                                    title: 'Success',
+                                    body: '<p>Settings saved successfully.</p>'
+                                });
+                            }
+                            else{
+                                AJS.messages.error({
+                                    title: 'Error',
+                                    body: '<p>Error saving data. Please try again.</p>'
+                                });
+                            }
+                        }
+                    });
+                }
+                else{
+                    AJS.$([document.documentElement, document.body]).animate({
+                        scrollTop: $("#fname").offset().top
+                    }, 500);
+                }
+            });
+            AJS.$("#aui-frm").validate({
+                    rules: {
+                        fname:{
+                            required: true,
+                            nameregex : true,
+                            maxlength : 260
+                        },
+                        lname:{
+                            required: true,
+                            nameregex : true,
+                            maxlength : 260
+                        },
+                        company_name:{
+                            required: true,
+                            maxlength : 260
+                        },
+                        email_address:{
+                            required: true,
+                            check_email: true,
+                            maxlength: 260
+                        },
+                        phone_number:{
+                            required: true,
+                            opphonenumber : true
+                        },
+                        shipping_amount:{
+                            ppriceValidator : true
+                        },
+                        tax_name:{
+                            maxlength: 100
+                        }                        
+                    },
+                    messages: {
+                        fname: {
+                            required: 'First name is required.',
+                            nameregex: 'Please enter a valid name.',
+                            maxlength: 'First name can not be longer than {0} characters.'
+                        },
+                        lname: {
+                            required: 'Last name is required.',
+                            nameregex: 'Please enter a valid name.',
+                            maxlength: 'Last name can not be longer than {0} characters.'
+                        },
+                        company_name: {
+                            required: 'Company name is required.',
+                            maxlength: 'Company name can not be longer than {0} characters.'
+                        },
+                        email_address: {
+                            required: "Email address is required.",
+                            check_email: "Please enter a valid email address.",
+                            maxlength: "Email address can not be longer than {0} characters."
+                        },
+                        phone_number:{
+                            required: 'Phone number is required.',                            
+                        },
+                        shipping_amount:{
+                            ppriceValidator : 'Please enter a valid shipping amount.'
+                        },
+                        tax_name:{
+                            maxlength:"Tax name can not be longer than {0} characters."
+                        }
+                    }
+            });
+            
+            AJS.$.validator.addMethod("nameregex", function(value, element) {
+                return this.optional( element ) || /^[a-zA-Z]+$/.test( value );
+            }, 'Please enter a valid name.');
+                
+            AJS.$.validator.addMethod("check_email", function(value, element) {
+                return this.optional( element ) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test( value );
+            }, 'Please enter a valid email address.');
+            
+            AJS.$.validator.addMethod("opphonenumber", function(value, element) {
+                return this.optional( element ) || /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test( value );
+            }, 'Please enter a valid phone number.');
+            
+            AJS.$.validator.addMethod("ppriceValidator", function(value, element) {
+                return this.optional( element ) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test( value );
+            }, 'Please enter a valid amount.');
+            
+        });
+    </script>
+  </body>
+</html>
