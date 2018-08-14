@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/5.9.17/css/aui.min.css" media="all">
+    <script src="https://ac-getting-started.atlassian.net/atlassian-connect/all.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="//aui-cdn.atlassian.com/aui-adg/5.9.17/js/aui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <style type="text/css">
+        form.aui .checkbox .error,
+        form.aui .field-group .error,
+        form.aui .group .error,
+        form.aui .radio .error{
+            display: inline-block !important;
+            width: 100%;
+        }
+        label.error{
+            clear: none !important;
+            text-align: left !important;                
+            color: #de350b !important;                
+        }
+    </style>
+  </head>
+  <body class="aui-page-focused aui-page-focused-xlarge">
+    <div id="page">
+      <section id="content">
+        <header class="aui-page-header">
+          <div class="aui-page-header-inner">
+            <div class="aui-page-header-main">
+              <h2>PayPal For Jira Feedback form page</h2>
+              <p id="custom-message">This is an example configuration page for board ID: {{id}} with board type: {{type}}.</p>
+            </div>
+          </div>
+        </header>
+          <div class="aui-page-panel">
+            <div class="aui-page-panel-inner">
+                <section class="aui-page-panel-content">
+                    <form class="aui" id="aui-frm" enctype="multipart/form-data">
+                        <div class="aui-group">
+                            <div class="aui-item">
+                                <h3>Feedback</h3>
+                                <fieldset>                                    
+                                    <div class="field-group">
+                                        <label for="fname">Name<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="fname" name="fname" title="first name" autocomplete="off" tabindex="1" autofocus>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="lname">Email<span class="aui-icon icon-required"> required</span></label>
+                                        <input class="text" type="text" id="email_address" name="email_address" title="last name" autocomplete="off" tabindex="2">
+                                    </div>                                    
+                                    <div class="field-group">
+                                        <label for="address">Message</label>
+                                        <textarea class="textarea" rows="3" cols="10" name="message" id="message" tabindex="3"></textarea>
+                                    </div>                                                                        
+                                </fieldset>
+                                <div id="aui-message-bar" style="margin-top: 20px"></div>
+                                <div class="buttons-container">
+                                    <div class="buttons">
+                                        <input class="button submit" type="submit" value="Save" id="save">
+                                        <a class="cancel" href="#">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="aui-item">                                
+                            </div>
+                        </div>                        
+                    </form>
+                </section>
+            </div>
+          </div>
+      </section>
+    </div>
+    <script>
+        AJS.$(document).ready(function () {           
+            var urls = '';                
+            AJS.$(document).on('click', '#save', function (e) {
+                e.preventDefault();
+                if (AJS.$("#aui-frm").valid()) {
+                    
+                    // you can make ajax call here
+                    AJS.messages.success({
+                        title: 'Success',
+                        body: '<p>Feedback sent.</p>'
+                    });                           
+                }
+                else{
+                    AJS.$([document.documentElement, document.body]).animate({
+                        scrollTop: $("#fname").offset().top
+                    }, 500);
+                }
+            });
+            AJS.$("#aui-frm").validate({
+                    rules: {
+                        fname:{
+                            required: true,
+                            nameregex : true,
+                            maxlength : 260
+                        },
+                        email_address:{
+                            required: true,
+                            check_email: true,
+                            maxlength: 260
+                        }                       
+                    },
+                    messages: {
+                        fname: {
+                            required: 'First name is required.',
+                            nameregex: 'Please enter a valid name.',
+                            maxlength: 'Name can not be longer than {0} characters.'
+                        },
+                        email_address: {
+                            required: "Email address is required.",
+                            check_email: "Please enter a valid email address.",
+                            maxlength: "Email address can not be longer than {0} characters."
+                        }                        
+                    }
+            });
+            
+            AJS.$.validator.addMethod("nameregex", function(value, element) {
+                return this.optional( element ) || /^[a-zA-Z ]+$/.test( value );
+            }, 'Please enter a valid name.');
+                
+            AJS.$.validator.addMethod("check_email", function(value, element) {
+                return this.optional( element ) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test( value );
+            }, 'Please enter a valid email address.');                       
+        });
+    </script>
+  </body>
+</html>
