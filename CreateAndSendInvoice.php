@@ -73,12 +73,14 @@ $configArray = array(
 );
 
 $PayPal = new \angelleye\PayPal\rest\invoice\InvoiceAPI($configArray);
+$str = file_get_contents('includes/saved_configuration.json');
+$marray = json_decode($str);
 
 $request['merchantInfo'] = array(
-    'Email' => 'tejasm-merchant@itpathsolutions.co.in', // The merchant email address. Maximum length is 260 characters.
-    'FirstName' => 'Drew', // The merchant first name. Maximum length is 30 characters.
-    'LastName' => 'Angell', // The merchant last name. Maximum length is 30 characters.        
-    'BusinessName' => 'AngellEYE', // The merchant company business name. Maximum length is 100 characters.
+    'Email' => $marray['email_address'], // The merchant email address. Maximum length is 260 characters.
+    'FirstName' => $marray['fname'], // The merchant first name. Maximum length is 30 characters.
+    'LastName' => $marray['lname'], // The merchant last name. Maximum length is 30 characters.        
+    'BusinessName' => $marray['company_name'], // The merchant company business name. Maximum length is 100 characters.
 );
 $attachments = json_decode($requestArray['attachedFiles'],true);
 $fileToAttach = array();

@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="field-group">
                                         <label for="address">Address</label>
-                                        <textarea class="textarea" rows="3" cols="10" name="address" id="licenseKey" tabindex="6"></textarea>
+                                        <textarea class="textarea" rows="3" cols="10" name="address" id="address" tabindex="6"></textarea>
                                     </div>                                                                        
                                 </fieldset>
                             </div>                            
@@ -115,6 +115,38 @@
     </div>
     <script>
         AJS.$(document).ready(function () {
+            var config = '';
+            AJS.$.ajax({
+                url: 'fetch_json.php', // point to server-side PHP script 
+                dataType: 'json', // what to expect back from the PHP script
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: '',
+                type: 'post',
+                success: function (response) {
+                    if(response.success === 'true'){
+                        config = response.data;
+                        console.log(config);
+                        AJS.$('#fname').val(config.fname);
+                        AJS.$('#lname').val(config.lname);
+                        AJS.$('#company_name').val(config.company_name);
+                        AJS.$('#email_address').val(config.email_address);
+                        AJS.$('#phone_number').val(config.phone_number);
+                        AJS.$('#address').val(config.address);                        
+                        AJS.$('#logo_url').val(config.logo_url);                        
+                        AJS.$('#shipping_amount').val(config.shipping_amount);
+                        AJS.$('#tax_name').val(config.tax_name);
+                        AJS.$('#tax_amount').val(config.tax_amount);
+                        AJS.$('#note_to_recipient').val(config.note_to_recipient);
+                        AJS.$('#terms_conditions').val(config.terms_conditions);
+                        
+                    }                    
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
             var urls = '';
             AJS.$(document).on('change', '#uploadAttachment', function () {
                     var form_data = new FormData();
