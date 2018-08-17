@@ -434,7 +434,7 @@
                 AJS.$(document).on('click', '.remove_ae_row', function (e) {
                     var row_number = AJS.$(this).attr('data-rownumber');
                     AJS.$('#ae_row_' + row_number).remove();
-
+                    AJS.$('#tax_tr_' + row_number).remove();
                     AJS.$('.ae_row').each(function (i) {
                         AJS.$(this).attr('id', 'ae_row_' + i);
                         AJS.$(this).find('.itemName').attr('id', 'itemName_' + i);
