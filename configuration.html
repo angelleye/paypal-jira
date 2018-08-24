@@ -92,7 +92,7 @@
                                     <textarea class="textarea" rows="3" cols="10" name="terms_conditions" id="terms_conditions" tabindex="11"></textarea>
                                 </div>
                                 <div class="field-group">
-                                    <label for="uploadFile">Logo for in invoice</label>
+                                    <label for="uploadFile">Logo for invoice</label>
                                     <input class="upfile" type="file" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="image/jpeg,image/png">
                                     <input type="hidden" name="logo_url" id="logo_url" />
                                 </div>
@@ -126,8 +126,7 @@
                 type: 'post',
                 success: function (response) {
                     if(response.success === 'true'){
-                        config = response.data;
-                        console.log(config);
+                        config = response.data;                        
                         AJS.$('#fname').val(config.fname);
                         AJS.$('#lname').val(config.lname);
                         AJS.$('#company_name').val(config.company_name);
