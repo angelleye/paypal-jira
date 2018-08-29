@@ -1,0 +1,37 @@
+{
+  "name": "PayPal for Jira",
+  "description": "Create PayPal invoices from within Jira.",
+  "key": "com.angelleye.paypal-jira",
+  "baseUrl": "https://sandbox.angelleye.com/atlassian/paypal-for-jira",
+  "vendor": {
+    "name": "AngellEYE, LLC",
+    "url": "https://www.angelleye.com/"
+  },
+  "authentication": {
+    "type": "none"
+  },
+  "apiVersion": 1,
+  "modules": {
+    "generalPages": [
+      {
+        "url": "/PayPalInvoicing.html",
+        "key": "paypal-jira",
+        "location": "system.top.navigation.bar",
+        "name": {
+          "value": "PayPal Invoicing"
+        }
+      }
+    ],
+    "webPanels": [
+      {
+        "key": "my-configuration-page",
+        "url": "configuration?id={board.id}&type={board.type}",
+        "name": {
+          "value": "My Configuration Page"
+        },
+        "location": "jira.agile.board.configuration",
+        "weight": 1
+      }
+    ]
+  }
+}

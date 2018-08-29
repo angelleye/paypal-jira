@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.4.1/jquery-migrate.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/sinon.js/1.15.4/sinon.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/js/aui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/js/aui-experimental.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/js/aui-datepicker.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/css/aui.min.css" media="all">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aui/7.6.0/aui/css/aui-experimental.min.css" media="all">
+
+        <style>
+            .custom-field-group {
+                padding-left: 66px !important;
+            }
+
+            .form.aui .select {
+                padding: 2px 5px 5px 5px !important;
+            }
+
+            .mt20 {
+                margin-top: 20px !important;
+            }
+
+            .add-item-btn {
+                background-color: #ecf7fc;
+                border: 1px solid #91d4f0;
+                padding: 10px;
+                margin: 10px 0;
+                width: 100%;
+                display: inline-block;
+            }
+
+            .add-item-btn:hover {
+                color: #004975;
+            }
+
+            .add-item {
+                width: 100%;
+            }
+
+            .total-section {
+                display: inline-block;
+                border-top: 2px solid #ddd;
+            }
+
+            .sub-total-table {
+                border: 2px solid #ddd;
+                border-collapse: collapse;
+                text-align: right;
+            }
+
+            .sub-total-table tr td,
+            .sub-total-table tr th {
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+
+            .grey-bg {
+                background-color: #f6f6f6;
+            }
+
+            .txtareacls{
+                float: unset !important;
+                margin-left: 0 !important;
+                padding: 0 !important;
+                text-align: left !important;
+            }
+
+            .txtarea{
+                font-family: inherit;
+                line-height: 1.4285714285714;
+                margin: 0;
+                padding: 4px 5px;
+                border: 1px solid #ccc;
+                border-radius: 3.01px;
+                box-sizing: border-box;
+                width: 100%;
+            }
+            form.aui .checkbox .error,
+            form.aui .field-group .error,
+            form.aui .group .error,
+            form.aui .radio .error {
+                clear: none !important;
+                width: 100%;
+            }
+            label.error{
+                clear: none !important;
+                text-align: left !important;
+                /*width: 100% !important;*/
+                color: #de350b !important;
+                display: inline-block;
+            }
+        </style>
+    </head>
+
+    <body class="aui-page-fixed">
+        <div id="page">
+            <section id="content" class="ac-content" role="main">
+                <header class="aui-page-header">
+                    <div class="aui-page-header-inner">
+                        <div class="aui-page-header-main">            
+                            <a href="https://www.angelleye.com/" target="_blank" title="AngellEye"><img alt="AngellEye logo" src="images/logo.png"></a>
+                        </div>
+                    </div>
+                </header>
+                <div class="aui-page-panel">
+                    <div class="aui-page-panel-inner">
+                        <section class="aui-page-panel-content">
+                            <form class="aui" id="aui-frm" enctype="multipart/form-data">
+                                <div class="aui-group">
+                                    <div class="aui-item">
+                                        <img src="images/your-logo-here.png" height="150" width="150" id="logoid">
+                                    </div>
+                                    <div class="aui-item"></div>
+                                    <div class="aui-item">
+                                        <div class="field-group">
+                                            <label for="invoiceNumber">Invoice Number</label>
+                                            <input class="text" type="text" id="invoiceNumber" name="invoiceNumber" title="Invoice Number" maxlength="25">
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="issueDate">Invoice Date</label>
+                                            <input class="text aui-date-picker" id="issueDate"  name="issueDate" type="date" />
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="reference">Reference</label>
+                                            <input class="text" type="text" id="reference" name="reference" title="Referance" placeholder="Such as PO#">
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="dueDate">Due Date</label>
+                                            <input class="text aui-date-picker" id="dueDate" name="dueDate" type="date" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="aui-group aui-group-split">
+                                    <div class="aui-item">
+                                        <div class="field-group custom-field-group">
+                                            <label for="billToEmail"><h4>Bill to:</h4></label>
+                                            <input class="text full-width-field" type="text" id="billToEmail" name="billToEmail" title="Bill to">
+                                        </div>
+                                        <div class="field-group custom-field-group">
+                                            <label for="billToEmailCc"><h4>Cc:</h4></label>
+                                            <input class="text full-width-field" type="text" id="billToEmailCc" name="billToEmailCc" title="Cc">
+                                        </div>
+                                    </div>
+                                    <div class="aui-item"></div>
+                                </div>
+                                <div class="aui-group mt20">
+                                    <div class="aui-item">
+                                        <table class="aui">
+                                            <thead>
+                                                <tr>
+                                                    <th id="basic-desc">Description</th>
+                                                    <th id="basic-qty">Quantity</th>
+                                                    <th id="basic-price">Price</th>
+                                                    <th id="basic-tax">Tax</th>
+                                                    <th id="basic-amt">Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="ae_row" id="ae_row_0">
+                                                    <td headers="basic-desc">
+                                                        <input class="text full-width-field itemName" type="text" id="itemName_0" name="itemName[0]" title="Item name" placeholder="Item name">
+                                                        <textarea class="textarea full-width-field" name="itemDescription" id="itemDescription_0" placeholder="Enter detailed description (optional)" style="margin-top: 5px;"></textarea>
+                                                    </td>
+                                                    <td headers="basic-qty"><input class="text short-field itemQty" type="text" id="itemQty_0" name="itemQty[0]" title="Quantity" value="1"></td>
+                                                    <td headers="basic-price"><input class="text short-field itemPrice" type="text" id="itemPrice_0" name="itemPrice[0]" title="Price" value="0.00"></td>
+                                                    <td headers="basic-tax">
+                                                        <input class="text short-field" type="text" id="taxName_0" name="taxName" title="Tax" placeholder="Name">
+                                                        <input class="text short-field taxRate" type="text" id="taxRate_0" name="taxRate[0]" title="Tax" placeholder="Amount" value="0.00"> %
+                                                    </td>
+                                                    <td headers="basic-amt" class="grey-bg"><input type="text" id="basicAmt_0" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="aui-group">
+                                    <div class="aui-item">
+                                        <div class="add-item">
+                                            <a class="add-item-btn" href="#" id="add_new_item"><span class="aui-icon aui-icon-small aui-iconfont-add"></span> Add another line item</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="aui-group aui-group-split mt20">
+                                    <div class="aui-item">
+                                        <div class="checkbox">
+                                            <input class="checkbox" type="checkbox" name="allowPartialPayments" id="allowPartialPayments">
+                                            <label for="allowPartialPayments">Allow partial payment</label>
+                                        </div>
+                                        <div class="mamout" style="display: none">
+                                            <label for="d-fname-short">Minimum amount due (optional)</label>
+                                            <input class="text short-field" type="text" id="minimumDueAmount" name="minimumDueAmount" title="Minimum amount due"><label> USD</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="aui-item">
+                                        <div class="total-section">
+                                            <table class="sub-total-table">
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="3">Subtotal</th>
+                                                        <td class="grey-bg itemSubTotal">$0.00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Discount</th>
+                                                        <td>
+                                                            <input type="text" name="invDiscount" id="invDiscount" class="text short-field" value="0.00">
+                                                        </td>
+                                                        <td>
+                                                            <select name="invoiceDiscType" id="invoiceDiscType" class="select">
+                                                                <option value="percentage">%</option>
+                                                                <option value="dollar">$</option>
+                                                            </select>
+                                                        </td>
+                                                        <td class="grey-bg invoiceDiscountAmount">$0.00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Shipping</th>
+                                                        <td colspan="2">
+                                                            <input type="text" name="shippingAmount" id="shippingAmount" class="text short-field" value="0.00">
+                                                        </td>                                                        
+                                                        <td class="grey-bg shippingAmountTd">$0.00</td>
+                                                    </tr>
+                                                    <tr class="dynamic_tax" id="tax_tr_0"></tr>
+                                                    <tr class="grey-bg">
+                                                        <th colspan="3">Total</th>                                                        
+                                                        <td class="finalTotal">$0.00 USD</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aui-group mt20">
+                                    <div class="aui-item">
+                                        <div class="field-group" style="padding-left:0">
+                                            <label for="notes" class="txtareacls"><h4 style="margin-bottom:10px">Note to recipient</h4></label>
+                                            <textarea class="txtarea" name="notes" rows="5" id="notes" placeholder="Such as 'Thank you for your business'"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="aui-item">
+                                        <div class="field-group" style="padding-left:0">
+                                            <label for="terms" class="txtareacls"><h4 style="margin-bottom:10px">Terms and conditions</h4></label>
+                                            <textarea class="txtarea" name="terms" rows="5" id="terms" placeholder="Include your return or cancelation policy"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aui-group aui-group-split mt20">
+                                    <div class="aui-item">
+                                        <div class="">
+                                            <label for="uploadFile">Attach file</label>
+                                            <input class="upfile" type="file" multiple="multiple" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="application/xml,text/xml,application/pdf,image/gif,image/jpeg,image/png,image/tiff,image/bmp">                                            
+                                        </div>
+                                        <div class="checkbox mt20">
+                                            <input class="checkbox" type="checkbox" name="addMemoDesc" id="addMemoDesc">
+                                            <label for="addMemoDesc">Add memo to self</label>
+                                        </div>
+                                        <div class="field-group aememodesc" style="padding-left:0;display: none">
+                                            <textarea class="txtarea" name="memodesc" rows="5" id="memodesc" placeholder="Add memo to self (your recipient won't see this)"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="aui-item">
+                                    </div>
+                                </div>
+                                <div id="aui-message-bar" class="mt20"></div>                                
+                                <div class="aui-group aui-group-split">
+                                    <div class="aui-item">
+                                        <button class="aui-button aui-button-primary aebutton_submit" data-buttontype="send_inoive" id="send_invoice" style="font-size: 15px">Send</button>                                        
+                                        <button class="aui-button aebutton_submit" id="save_as_draft" data-buttontype="save_as_draft" style="font-size: 15px">Save as draft</button>
+                                    </div>
+                                    <div class="aui-item">
+                                    </div>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </section>
+            <footer id="footer" role="contentinfo">
+                <section class="footer-body" style="background: url(images/logo.png) bottom no-repeat">
+                </section>
+            </footer>
+        </div>
+        <script id="connect-loader" data-options="sizeToParent:true;">
+            (function () {
+                var getUrlParam = function (param) {
+                    var codedParam = (new RegExp(param + '=([^&]*)')).exec(window.location.search)[1];
+                    return decodeURIComponent(codedParam);
+                };
+
+                var baseUrl = getUrlParam('xdm_e') + getUrlParam('cp');
+                var options = document.getElementById('connect-loader').getAttribute('data-options');
+
+                var script = document.createElement("script");
+                script.src = baseUrl + '/atlassian-connect/all.js';
+
+                if (options) {
+                    script.setAttribute('data-options', options);
+                }
+
+                document.getElementsByTagName("head")[0].appendChild(script);
+            })();
+        </script>
+        <script>
+            AJS.$(document).ready(function () {
+                var config = '';
+                AJS.$.ajax({
+                    url: 'fetch_json.php', // point to server-side PHP script 
+                    dataType: 'json', // what to expect back from the PHP script
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: '',
+                    type: 'post',
+                    success: function (response) {
+                        if(response.success === 'true'){
+                            config = response.data;
+                            AJS.$('#logoid').attr('src',config.logo_url);
+                            AJS.$('#shippingAmount').val(parseFloat(config.shipping_amount).toFixed(2));
+                            AJS.$('#terms').val(AJS.$.trim(config.terms_conditions));
+                            AJS.$('#notes').val(AJS.$.trim(config.note_to_recipient));
+                            AJS.$('input[name="taxName"]').each(function () {
+                                AJS.$(this).val(config.tax_name);
+                            });
+                            AJS.$('input[id^="taxRate"]').each(function () {
+                                AJS.$(this).val(config.tax_amount);
+                            });
+                            countSubTotal();
+                        }
+                        else if(response.success === 'false'){
+                            alert('Error fetching confuguration data.');
+                        }
+                        else{                            
+                            alert('Setting file not found.');
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+                    
+                var urls = '';
+                AJS.$('#issueDate').datePicker({
+                    'overrideBrowserDefault': true,
+                    'dateFormat': 'mm/dd/yy'
+                });
+                AJS.$('#dueDate').datePicker({
+                    'overrideBrowserDefault': true,
+                    'dateFormat': 'mm/dd/yy'
+                });
+
+                AJS.$('#add_new_item').on('click', function (e) {
+                    e.preventDefault();
+                    var row_count = AJS.$('.ae_row').length;
+                    var $parentTR = AJS.$('#ae_row_' + (row_count - 1));
+                    var $html = '<tr class="ae_row" id="ae_row_' + row_count + '">';
+                    $html += '<td headers="basic-desc">\n\
+                          <input class="text full-width-field itemName" type="text" id="itemName_' + row_count + '" name="itemName['+row_count+']" title="Item name" placeholder="Item name">\n\
+                          <textarea class="textarea full-width-field" name="itemDescription" id="itemDescription_' + row_count + '" placeholder="Enter detailed description (optional)" style="margin-top: 5px;"></textarea>\n\
+                       </td>';
+                    $html += '<td headers="basic-qty"><input class="text short-field itemQty" type="text" id="itemQty_' + row_count + '" name="itemQty['+row_count+']" title="Quantity" value="1"></td>';
+                    $html += '<td headers="basic-price"><input class="text short-field itemPrice" type="text" id="itemPrice_' + row_count + '" name="itemPrice['+row_count+']" title="Price" value="0.00"></td>';
+                    $html += '<td headers="basic-tax"><input class="text short-field" type="text" id="taxName_' + row_count + '" name="taxName" title="Tax" placeholder="Name"> <input class="text short-field taxRate" type="text" id="taxRate_' + row_count + '" name="taxRate['+row_count+']" title="Tax" placeholder="Amount" value="0.00"> %</td>';
+                    $html += '<td headers="basic-amt" class="grey-bg"><input type="hidden" id="basicAmt_' + row_count + '" name="basicAmt"><input type="text" id="basicAmt_' + row_count + '" name="basicAmt" disabled="disabled" value="$0.00" class="text short-field"></td>';
+                    $html += '<td style="cursor:pointer" class="remove_ae_row" data-rowNumber="' + row_count + '" id="remove_ae_row_' + row_count + '"><span class="aui-icon aui-icon-small aui-iconfont-cross-circle"></span></td>';
+                    $html += '</tr>';
+
+                    AJS.$($html).insertAfter($parentTR);					
+                    AJS.$('#taxName_'+row_count).val(config.tax_name);
+                    AJS.$('#taxRate_'+row_count).val(config.tax_amount);
+
+                    var dynamic_tax_count = AJS.$('.dynamic_tax').length;                    
+                    var parent_dynamic_tax = AJS.$('#tax_tr_'+(dynamic_tax_count-1));
+                    var html_dynamic_tax = '<tr class="dynamic_tax" id="tax_tr_'+dynamic_tax_count+'"></tr>';
+                    AJS.$(html_dynamic_tax).insertAfter(parent_dynamic_tax);
+
+                    AJS.$('input.itemName').each(function() {                        
+                        AJS.$(this).rules("add", 
+                        {
+                            required: true,
+                            messages: {
+                                required:"Please enter valid item name."
+                            }
+                        });
+                    });
+                    AJS.$('input.itemQty').each(function() {
+                        AJS.$(this).rules("add", 
+                        {
+                            required: true,
+                            messages: {
+                                required:"Please enter valid quantity."
+                            }
+                        });
+                    });
+                    
+                    AJS.$('input.itemPrice').each(function() {
+                        AJS.$(this).rules("add", 
+                        {
+                            required: true,
+                            priceValidator:true,
+                            messages: {
+                                required:"Please enter valid quantity.",
+                                priceValidator:"Please enter a valid amount."
+                            }
+                        });
+                    });
+                    
+                    AJS.$('input.taxRate').each(function() {                        
+                        AJS.$(this).rules("add", 
+                        {
+                            ppriceValidator:true,
+                            messages: {                                
+                                priceValidator:"Please enter a valid amount."
+                            }
+                        });
+                    });  
+                   
+                    countSubTotal();
+                });
+
+                AJS.$(document).on('click', '.remove_ae_row', function (e) {
+                    var row_number = AJS.$(this).attr('data-rownumber');
+                    AJS.$('#ae_row_' + row_number).remove();
+
+                    AJS.$('.ae_row').each(function (i) {
+                        AJS.$(this).attr('id', 'ae_row_' + i);
+                        AJS.$(this).find('.itemName').attr('id', 'itemName_' + i);
+                        AJS.$(this).find('.itemName').attr('name', 'itemName['+i+']');
+                        
+                        AJS.$(this).find('.textarea').attr('id', 'itemDescription_' + i);
+                        
+                        AJS.$(this).find('.itemQty').attr('id', 'itemQty_' + i);
+                        AJS.$(this).find('.itemQty').attr('name', 'itemQty['+i+']');
+                        
+                        AJS.$(this).find('.itemPrice').attr('id', 'itemPrice_' + i);
+                        AJS.$(this).find('.itemPrice').attr('name', 'itemPrice['+i+']');
+                        
+                        AJS.$(this).find('.taxRate').attr('id', 'taxRate_' + i);
+                        AJS.$(this).find('.taxRate').attr('name', 'taxRate['+i+']');
+                        
+                        AJS.$(this).find('input[name="basicAmt"]').attr('id', 'basicAmt_' + i);
+                        AJS.$(this).find('.remove_ae_row').attr('id', 'remove_ae_row_' + i);
+                        AJS.$(this).find('.remove_ae_row').attr('data-rownumber', i);
+                    });
+                    countSubTotal();
+                    countFinalTotal(AJS.$('input[name="invDiscount"]').val());
+                });
+
+                AJS.$("#allowPartialPayments").click(function () {
+                    if (AJS.$(this).is(":checked")) {
+                        AJS.$(".mamout").show(300);
+                    } else {
+                        AJS.$(".mamout").hide(200);
+                    }
+                });
+
+                AJS.$("#addMemoDesc").click(function () {
+                    if (AJS.$(this).is(":checked")) {
+                        AJS.$(".aememodesc").show(300);
+                    } else {
+                        AJS.$(".aememodesc").hide(200);
+                    }
+                });
+
+                AJS.$(document).on('change blur keyup', 'input[id^="itemQty_"]', function () {
+                    countSubTotal();
+                });
+                AJS.$(document).on('change blur keyup', 'input[id^="itemPrice_"]', function () {
+                    countSubTotal();
+                });
+                AJS.$('input[name="invDiscount"]').on('change blur keyup', function () {
+                    countFinalTotal(AJS.$(this).val());
+                });
+                AJS.$(document).on('change blur keyup', 'input[id^="taxRate_"]', function () {
+                    countSubTotal();
+                });
+
+                AJS.$(document).on('change', 'select[name="invoiceDiscType"]', function () {
+                    countFinalTotal(AJS.$('input[name="invDiscount"]').val());
+                });
+
+                AJS.$(document).on('change blur keyup', 'input[name="shippingAmount"]', function () {
+                    countFinalTotal(AJS.$('input[name="invDiscount"]').val());
+                });
+
+                AJS.$(document).on('change', '#uploadAttachment', function (e) {
+                    var form_data = new FormData();
+                    var ins = document.getElementById('uploadAttachment').files.length;
+                    for (var x = 0; x < ins; x++) {
+                        form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
+                    }
+                    AJS.$.ajax({
+                        url: 'uploads.php', // point to server-side PHP script 
+                        dataType: 'text', // what to expect back from the PHP script
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                            urls = response;
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        }
+                    });
+                });
+                AJS.$(document).on('click', '.aebutton_submit', function (e) {
+                    e.preventDefault();
+                    if (AJS.$("#aui-frm").valid()) {
+                        var button = AJS.$(this);
+                        var buttontype = button.attr('data-buttontype');
+                        var save_as_draft = '';
+                        var invoiceNumber = AJS.$('#invoiceNumber').val();
+                        var issueDate = AJS.$('#issueDate').val();
+                        var reference = AJS.$('#reference').val();
+                        var dueDate = AJS.$('#dueDate').val();
+                        var billToEmail = AJS.$('#billToEmail').val();
+                        var billToEmailCc = AJS.$('#billToEmailCc').val();
+
+                        var itemNames = AJS.$(".itemName").map(function () {
+                            return $(this).val();
+                        }).get();
+                        var itemDescriptions = AJS.$("textarea[name='itemDescription']").map(function () {
+                            return $(this).val();
+                        }).get();
+                        var itemQtys = AJS.$(".itemQty").map(function () {
+                            return $(this).val();
+                        }).get();
+                        var itemPrices = AJS.$(".itemPrice").map(function () {
+                            return $(this).val();
+                        }).get();
+
+                        var taxNames = AJS.$("input[name='taxName']").map(function () {
+                            return $(this).val();
+                        }).get();
+                        var taxRates = AJS.$(".taxRate").map(function () {
+                            return $(this).val();
+                        }).get();
+                        var itemsAmts = AJS.$("input[name='basicAmt']").map(function () {
+                            return $(this).val();
+                        }).get();
+
+                        var partialPayments = 'no';
+                        var minimumDueAmount, memodesc = '';
+                        if (AJS.$("#allowPartialPayments").is(":checked")) {
+                            partialPayments = 'yes';
+                            minimumDueAmount = AJS.$("#minimumDueAmount").val();
+                        }
+
+                        if (buttontype == 'send_inoive') {
+                            save_as_draft = 'no';
+                        } else {
+                            save_as_draft = 'yes';
+                        }
+                        var invDiscount = AJS.$("#invDiscount").val();
+                        var invoiceDiscType = AJS.$("#invoiceDiscType").val();
+                        var shippingAmount = AJS.$("#shippingAmount").val();
+                        var itemSubTotal = AJS.$(".itemSubTotal").html();
+                        var invoiceDiscountAmount = AJS.$(".invoiceDiscountAmount").html();
+                        var shippingAmountTd = AJS.$(".shippingAmount").html();
+                        var finalTotal = AJS.$(".finalTotal").html();
+
+                        var notes = AJS.$("#notes").val();
+                        var terms = AJS.$("#terms").val();
+
+                        var addMemoDesc = 'no';
+                        if (AJS.$("#addMemoDesc").is(":checked")) {
+                            addMemoDesc = 'yes';
+                            memodesc = AJS.$("#memodesc").val();
+                        }
+                        var invoiceDiscObj = '';
+                        if (invoiceDiscType === 'percentage') {
+                            invoiceDiscObj = {type: 'Percent', 'Amount': invDiscount};
+                        } else {
+                            invoiceDiscObj = {type: 'Amount', 'Amount': invDiscount};
+                        }
+                        var mainItemObject = {};
+                        var itemObj = Object();
+                        AJS.$.each(itemNames, function (i, value) {
+                            itemObj = Object();
+                            itemObj.Name = itemNames[i];
+                            itemObj.Description = itemDescriptions[i];
+                            itemObj.Quantity = itemQtys[i];
+                            itemObj.UnitPrice = {'Currency': 'USD', 'Value': itemPrices[i]};
+                            itemObj.Tax = {'Name': taxNames[i], 'Percent': taxRates[i]};
+                            mainItemObject[i] = itemObj;
+                        });
+
+                        var request =
+                                {
+                                    Number: invoiceNumber,
+                                    LogoUrl : AJS.$('#logoid').attr('src'),                                    
+                                    InvoiceDate: issueDate,
+                                    Reference: reference,
+                                    AllowPartialPayment: partialPayments,
+                                    Note: notes,
+                                    Terms: terms,
+                                    addMemoDesc: addMemoDesc,
+                                    MerchantMemo: memodesc,
+                                    MinimumAmountDue: minimumDueAmount,
+                                    DueDate: dueDate,
+                                    BillingEmail: billToEmail,
+                                    ccEmail: billToEmailCc,
+                                    itemArray: mainItemObject,
+                                    finalDiscountForInvoice: invoiceDiscObj,
+                                    ShippingCost: shippingAmount,
+                                    save_as_draft: save_as_draft,
+                                    attachedFiles:urls
+                                };
+                        $.ajax({
+                            type: 'POST',
+                            url: 'CreateAndSendInvoice.php',
+                            beforeSend: function () {
+                                button.text('Processing...');
+                            },
+                            complete: function () {
+
+                            },
+                            data: {
+                                create_invoice_request: JSON.stringify(request)
+                            },
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.success == 'true') {
+                                    button.text('Complete');
+                                    AJS.messages.success({
+                                        title: 'Success',
+                                        body: '<p> ' + result.msg + ' </p>'
+                                    });
+                                } else if (result.success == 'successwithwarning') {
+                                    button.text('Complete');
+                                    AJS.messages.info({
+                                        title: 'Success',
+                                        body: '<p> ' + result.msg + ' </p>'
+                                    });
+                                } else if (result.success == 'false') {
+                                    var name, field_details = '';
+                                    button.text('Try Again');
+                                    if ('errors' in result.error) {
+                                        if ('name' in result.error.errors) {
+                                            name = result.error.errors.name;
+                                        }
+                                        if ('details' in result.error.errors) {
+                                            var details = result.error.errors.details;
+                                            AJS.$.each(details, function (index, item) {
+                                                field_details += '<p><strong>' + item.field + ' </strong>' + item.issue + '</p>';
+                                            });
+                                        }
+                                    }
+                                    AJS.messages.error({
+                                        title: 'PayPal Error',
+                                        body: '<p> ' + result.msg + '</p><p>' + name + '</p>' + field_details
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    else{                        
+                        AJS.$([document.documentElement, document.body]).animate({
+                            scrollTop: $("#invoiceNumber").offset().top
+                        }, 1000);
+                    }
+                });
+
+
+                AJS.$(document).on('click', '#save_as_draft', function (e) {
+                    e.preventDefault();
+                });
+
+                AJS.$.validator.setDefaults({
+                    debug: true,
+                    success: "valid"
+                });
+                AJS.$("#aui-frm").validate({
+                    rules: {
+                        reference: {
+                            maxlength: 60
+                        },
+                        invoiceNumber: {                           
+                            maxlength : 25
+                        },
+                        billToEmail: {
+                            required: true,
+                            check_email: true,
+                            maxlength: 260
+                        },
+                        billToEmailCc: {
+                            check_email: true,                            
+                            maxlength: 260
+                        },
+                        'itemName[0]': {
+                            required: true
+                        },
+                        'itemQty[0]': {
+                            required: true,
+                            min: 1
+                        },
+                        'itemPrice[0]': {
+                            priceValidator: true
+                        },
+                        'taxRate[0]': {                           
+                            ppriceValidator : true
+                        },
+                        minimumDueAmount : {
+                            priceValidator : true
+                        },
+                        invDiscount:{
+                            ppriceValidator : true
+                        },
+                        shippingAmount:{
+                            ppriceValidator : true
+                        }
+                    },
+                    messages: {
+                        reference: {
+                            maxlength: 'Maxlength is {0}.'
+                        },
+                        invoiceNumber:{
+                            maxlength: "Maxlength  is {0}."
+                        },
+                        billToEmail: {
+                            required: "Email address is required.",
+                            check_email: "Please enter a valid email address.",                            
+                            maxlength: "Maxlength length is {0}."
+                        },
+                        billToEmailCc: {
+                            check_email: "Please enter a valid email address.",
+                            maxlength: "Maxlength length is {0}."
+                        },
+                        'itemName[0]': {
+                            required:"Please enter a valid item name."
+                        },
+                        'itemQty[0]': {
+                            required: "Quantity is required.",
+                            min: "Min qty is {0}."
+                        },
+                        'itemPrice[0]': {                           
+                            priceValidator : "Please enter a valid amount."
+                        },
+                        'taxRate[0]': {
+                            min: "Min Price is {0}.",
+                            ppriceValidator : "Please enter a valid amount."
+                        },
+                        minimumDueAmount : {
+                            priceValidator : "Please enter a valid amount."
+                        },
+                        invDiscount:{
+                            ppriceValidator : "Please enter a valid amount."
+                        },
+                        shippingAmount:{
+                            ppriceValidator : "Please enter a valid amount."
+                        }
+                    }
+                });
+                AJS.$.validator.addMethod("check_email", function(value, element) {
+                    return this.optional( element ) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test( value );
+                }, 'Please enter a valid email address.');
+                AJS.$.validator.addMethod("priceValidator", function(value, element) {  
+                    if(value <= 0){
+                        return false;
+                    }
+                    return this.optional( element ) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test( value );
+                }, 'Please enter a valid amount.');
+                AJS.$.validator.addMethod("ppriceValidator", function(value, element) {                    
+                    return this.optional( element ) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test( value );
+                }, 'Please enter a valid amount.');                
+            });
+
+            function countFinalTotal(val) {
+                var total = Number(AJS.$('.itemSubTotal').text().replace(/[^0-9\.-]+/g, ""));
+                var discountBase = AJS.$('select[name="invoiceDiscType"]').val();
+                var discount = parseFloat(val);
+                var discountAmt = 0;
+                if (discountBase == 'percentage') {
+                    discountAmt = parseFloat((total * discount) / 100);
+                } else if (discountBase == 'dollar') {
+                    discountAmt = parseFloat(val);
+                }
+                if(isNaN(discountAmt)){
+                    discountAmt = 0.00;
+                }
+                AJS.$('.invoiceDiscountAmount').text('$' + discountAmt.toFixed(2));
+
+                var shippingAmount = parseFloat(AJS.$('input[name="shippingAmount"]').val());
+                if (isNaN(shippingAmount))
+                {
+                    shippingAmount = 0.00;
+                }
+                AJS.$('.shippingAmountTd').text('$' + shippingAmount.toFixed(2));
+                var taxs = 0;
+                AJS.$('.tax_to_add').each(function () {                   
+                    taxs = taxs + parseFloat(AJS.$(this).html());
+                });  
+                
+                var finalTotal = total - discountAmt + shippingAmount + taxs;
+
+                AJS.$('.finalTotal').text('$' + finalTotal.toFixed(2) + ' USD');
+            }
+
+            function countSubTotal() {
+                var total = 0;
+                var i = 0;
+                AJS.$('input[id^="itemQty_"]').each(function () {
+                    var qty = parseInt(AJS.$(this).val());
+                    var price = parseFloat(AJS.$(this).parent().next().find('input[id^="itemPrice_"]').val());
+                    var tax = parseFloat(AJS.$(this).parent().next().next().find('input[id^="taxRate_"]').val());
+                    var taxName = AJS.$(this).parent().next().next().find('input[id^="taxName"]').val();
+                    var amount = (qty * price);
+                    var temp_amount = ((amount * tax) / 100);                    
+                    if(isNaN(amount)){
+                        amount = 0.00;
+                    }
+                    if(tax > 0 && $.isNumeric(tax)){
+                        AJS.$('#tax_tr_'+i).html('<td colspan="3"><b>Tax ('+tax+'%) </b>'+taxName+'</td><td>$<span class="tax_to_add">'+parseFloat(temp_amount).toFixed(2)+'</span></td>');
+                    }
+                    else{                        
+                        AJS.$('#tax_tr_'+i).html('');
+                    }
+                    AJS.$(this).parent().siblings('.grey-bg').find('input[name="basicAmt"]').val('$' + amount.toFixed(2));
+                    total = total + amount;                    
+                    i++;
+                });
+                AJS.$('.itemSubTotal').text('$' + total.toFixed(2));
+                countFinalTotal(AJS.$('input[name="invDiscount"]').val());
+            }
+        </script>
+
+    </body>
+
+</html>
