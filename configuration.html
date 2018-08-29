@@ -42,11 +42,11 @@
                                 <h3>Business Information</h3>
                                 <fieldset>                                    
                                     <div class="field-group">
-                                        <label for="fname">First name<span class="aui-icon icon-required"> required</span></label>
+                                        <label for="fname">First Name<span class="aui-icon icon-required"> required</span></label>
                                         <input class="text" type="text" id="fname" name="fname" title="first name" autocomplete="off" tabindex="1" autofocus>
                                     </div>
                                     <div class="field-group">
-                                        <label for="lname">Last name<span class="aui-icon icon-required"> required</span></label>
+                                        <label for="lname">Last Name<span class="aui-icon icon-required"> required</span></label>
                                         <input class="text" type="text" id="lname" name="lname" title="last name" autocomplete="off" tabindex="2">
                                     </div>
                                     <div class="field-group">
@@ -254,7 +254,8 @@
                         },
                         company_name: {
                             required: 'Company name is required.',
-                            maxlength: 'Company name can not be longer than {0} characters.'
+                            maxlength: 'Company name can not be longer than {0} characters.',
+                            noSpace : 'Please enter a valid company name.'
                         },
                         email_address: {
                             required: "Email address is required.",
