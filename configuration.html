@@ -96,6 +96,11 @@
                                     <input class="upfile" type="file" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="image/jpeg,image/png">
                                     <input type="hidden" name="logo_url" id="logo_url" />
                                 </div>
+                                <div class="field-group">
+                                    <label for="save_log_chk">Save API logs</label>
+                                    <input type="checkbox" name="save_log_chk" id="save_log_chk" />
+                                    <input type="hidden" name="save_log" id="save_log" value="off" />
+                                </div>
                                 </fieldset>
                                 <div id="aui-message-bar" style="margin-top: 20px"></div>
                                 <div class="buttons-container">
@@ -139,6 +144,14 @@
                         AJS.$('#tax_amount').val(config.tax_amount);
                         AJS.$('#note_to_recipient').val(config.note_to_recipient);
                         AJS.$('#terms_conditions').val(config.terms_conditions);
+                        if(config.save_logs == 'on'){
+                            AJS.$('#save_log').val('on');
+                            AJS.$('#save_log_chk').prop('checked', true);
+                        }
+                        else{
+                            AJS.$('#save_log').val('off');
+                            AJS.$('#save_log_chk').prop('checked', false);
+                        }
                         
                     }                    
                 },
@@ -146,6 +159,16 @@
                     console.log(response);
                 }
             });
+            
+            AJS.$(document).on('change', '#save_log_chk', function () {
+                if (AJS.$(this).is(':checked')) {
+                    AJS.$('#save_log').val('on');
+                    AJS.$('#save_log_chk').prop('checked', true);
+                } else {
+                    AJS.$('#save_log').val('off');
+                    AJS.$('#save_log_chk').prop('checked', false);
+                }
+            }); 
             var urls = '';
             AJS.$(document).on('change', '#uploadAttachment', function () {
                     var form_data = new FormData();

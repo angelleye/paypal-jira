@@ -10,5 +10,6 @@
     "tax_amount": "2.5",
     "note_to_recipient": "This is note to receipent",
     "terms_conditions": "This is terms and conditions",
-    "logo_url": "https://pics.sandbox.paypal.com/00/s/MzAwWDMwMFhQTkc/p/ZTUwNTQ4NjItOTM3Zi00MWZmLTk3NzAtNTRiZDgwZWM4YjY1/image_109.PNG"
+    "logo_url": "https:\/\/pics.sandbox.paypal.com\/00\/s\/MzAwWDMwMFhQTkc\/p\/ZTUwNTQ4NjItOTM3Zi00MWZmLTk3NzAtNTRiZDgwZWM4YjY1\/image_109.PNG",
+    "save_log": "on"
 }
