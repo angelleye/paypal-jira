@@ -74,7 +74,7 @@ $configArray = array(
 
 $PayPal = new \angelleye\PayPal\rest\invoice\InvoiceAPI($configArray);
 $str = file_get_contents('includes/saved_configuration.json');
-$marray = json_decode($str);
+$marray = json_decode($str,true);
 
 $request['merchantInfo'] = array(
     'Email' => $marray['email_address'], // The merchant email address. Maximum length is 260 characters.
@@ -88,11 +88,24 @@ if(!empty($attachments['files']) && count($attachments['files']) > 0){
     $fileToAttach = $attachments['files'];
 }
 $request['attachments'] = $fileToAttach;
+$file = 'logs/logs.txt';
+$fh = fopen($file, 'a');
+fwrite($fh,date('m-d-Y @ H:i:s -') . "PayPal Create Invoice Request " . print_r($request, true). "\n");
 $returnArray = $PayPal->create_invoice($request);
+fwrite($fh,date('m-d-Y @ H:i:s -') . "PayPal Create Invoice Response " . print_r($returnArray, true). "\n");
+fclose($fh);
 if(isset($returnArray['RESULT']) && $returnArray['RESULT'] == 'Success'){
     $invoice_id = $returnArray['INVOICE']['id'];
     if(isset($requestArray['save_as_draft']) && $requestArray['save_as_draft']  =='no'){
-        $send_invoice = $PayPal->send_invoice($invoice_id);
+        // Save log request  
+        $fh = fopen($file, 'a');
+        fwrite($fh,date('m-d-Y @ H:i:s -') . "PayPal Send Invoice Request " . print_r($invoice_id, true). "\n");
+        
+        $send_invoice = $PayPal->send_invoice($invoice_id);    
+        
+        // Save log response  
+        fwrite($fh,date('m-d-Y @ H:i:s -') . "PayPal Send Invoice Response " . print_r($send_invoice, true). "\n");
+        fclose($fh);
         if(isset($send_invoice['RESULT']) && $send_invoice['RESULT'] === 'Success'){
             echo json_encode( array('success' =>'true','msg'=>'Your invoice has been saved to your PayPal account.','invoice_id'=>$invoice_id));
             exit;
