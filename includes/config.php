@@ -96,13 +96,6 @@ $api_username = $sandbox ? 'sandbo_1215254764_biz_api1.angelleye.com' : 'LIVE_AP
 $api_password = $sandbox ? '1215254774' : 'LIVE_API_PASSWORD';
 $api_signature = $sandbox ? 'AiKZhEEPLJjSIccz.2M.tbyW5YFwAb6E3l6my.pY9br1z2qxKx96W18v' : 'LIVE_API_SIGNATURE';
 
-
-
-//$api_username = $sandbox ? 'kiritpatel571989-facilitator_api1.ymail.com' : 'info_api1.kidsunite4hope.org';
-//$api_password = $sandbox ? '2HZ9RN3RAYKNJQ96' : '7E4F5HLE5AK2YYLV';
-//$api_signature = $sandbox ? 'AFcWxV21C7fd0v3bYYYRCpSSRl31AD2wwjg4RmifHyynGrE4ye1JNszU' : 'AFcWxV21C7fd0v3bYYYRCpSSRl31AA-fwsa0gzQ2px-Bi1StTHys.1Nq';
-
-
 /**
  * Payflow Gateway API Credentials
  * ------------------------------
