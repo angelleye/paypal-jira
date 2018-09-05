@@ -71,3 +71,4 @@ uploads/*
 # exception to the rule
 !somefolder/.gitkeep 
 
+composer.lock
