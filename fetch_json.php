@@ -4,6 +4,7 @@ try {
     $str = file_get_contents('includes/saved_configuration.json');
     if(!empty($str)){
         $array = json_decode($str);
+        $array->today_date = date('m/d/Y');
         echo json_encode(array('success' => 'true' , 'msg' => 'success', 'data' => $array));
     }
     else{

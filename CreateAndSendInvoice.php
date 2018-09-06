@@ -30,7 +30,7 @@ if ($request['invoiceData']['AllowPartialPayment'] === true) {
 }
 
 $paymentTerm = array(
-    'DueDate'  => isset($requestArray['DueDate']) ? date('Y-m-d Z', strtotime($requestArray['DueDate'])) : ''
+    'DueDate'  => isset($requestArray['DueDate']) ? date('Y-m-d Z', strtotime($requestArray['DueDate'])) : date('Y-m-d Z',strtotime('now + 2 day'))
 );
 if(!empty($paymentTerm['DueDate'])){
     $request['paymentTerm'] = $paymentTerm;
