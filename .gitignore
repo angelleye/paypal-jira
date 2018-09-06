@@ -72,3 +72,4 @@ uploads/*
 !somefolder/.gitkeep 
 
 composer.lock
+includes/config.php
