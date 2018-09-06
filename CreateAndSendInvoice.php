@@ -107,11 +107,11 @@ if(isset($returnArray['RESULT']) && $returnArray['RESULT'] == 'Success'){
            fclose($fh);
         }
         if(isset($send_invoice['RESULT']) && $send_invoice['RESULT'] === 'Success'){
-            echo json_encode( array('success' =>'true','msg'=>'Your invoice has been saved to your PayPal account.','invoice_id'=>$invoice_id));
+            echo json_encode( array('success' =>'true','msg'=>'‌Your invoice has been created and sent to '.$request['billingInfo']['Email'].' successfully!','invoice_id'=>$invoice_id));
             exit;
         }
         else{
-            echo json_encode( array('success' =>'successwithwarning','msg'=>'Your invoice has been saved to your PayPal account.','invoice_id'=>$invoice_id));
+            echo json_encode( array('success' =>'successwithwarning','msg'=>'Your invoice has been created and sent to '.$request['billingInfo']['Email'].' successfully!','invoice_id'=>$invoice_id));
             exit;
         }
     }
