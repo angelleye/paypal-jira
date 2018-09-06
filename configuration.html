@@ -99,6 +99,7 @@
                                 <div class="field-group">
                                     <label for="save_log_chk">Save API logs</label>
                                     <input type="checkbox" name="save_log_chk" id="save_log_chk" />
+                                    <a href="" id="delete_logs" style="float: right;">Delete logs</a>
                                     <input type="hidden" name="save_log" id="save_log" value="off" />
                                 </div>
                                 </fieldset>
@@ -119,11 +120,33 @@
       </section>
     </div>
     <script>
-        AJS.$(document).ready(function () {
+        AJS.$(document).ready(function () {            
+            
+            AJS.$(document).on('click', '#delete_logs', function () {
+                if(confirm("Are you sure you want to delete existing logs?")){
+                    AJS.$.ajax({
+                        url: 'clear_logs.php',
+                        dataType: 'json',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: '',
+                        type: 'post',
+                        success: function (response) {
+
+                        }
+                    });
+                    return false;
+                }
+                else{
+                    return false;
+                }
+            });                        
+    
             var config = '';
             AJS.$.ajax({
-                url: 'fetch_json.php', // point to server-side PHP script 
-                dataType: 'json', // what to expect back from the PHP script
+                url: 'fetch_json.php',
+                dataType: 'json',
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -177,8 +200,8 @@
                         form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
                     }
                     AJS.$.ajax({
-                        url: 'uploads.php', // point to server-side PHP script 
-                        dataType: 'json', // what to expect back from the PHP script
+                        url: 'uploads.php',
+                        dataType: 'json',
                         cache: false,
                         contentType: false,
                         processData: false,
