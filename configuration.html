@@ -196,6 +196,7 @@
             AJS.$(document).on('change', '#uploadAttachment', function () {
                     var form_data = new FormData();
                     var ins = document.getElementById('uploadAttachment').files.length;
+                    form_data.append('from_config','yes');
                     for (var x = 0; x < ins; x++) {
                         form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
                     }
@@ -208,8 +209,8 @@
                         data: form_data,
                         type: 'post',
                         success: function (response) {
-                            urls = response;                            
-                            AJS.$.each(urls.files,function(index,value){                                
+                            urls = response;                               
+                            AJS.$.each(urls.files,function(index,value){
                                 AJS.$('#logo_url').val(value.url);
                             });
                         },
