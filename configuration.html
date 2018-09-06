@@ -96,6 +96,12 @@
                                     <input class="upfile" type="file" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="image/jpeg,image/png">
                                     <input type="hidden" name="logo_url" id="logo_url" />
                                 </div>
+                                <div class="field-group">
+                                    <label for="save_log_chk">Save API logs</label>
+                                    <input type="checkbox" name="save_log_chk" id="save_log_chk" />
+                                    <a href="" id="delete_logs" style="float: right;">Delete logs</a>
+                                    <input type="hidden" name="save_log" id="save_log" value="off" />
+                                </div>
                                 </fieldset>
                                 <div id="aui-message-bar" style="margin-top: 20px"></div>
                                 <div class="buttons-container">
@@ -114,11 +120,33 @@
       </section>
     </div>
     <script>
-        AJS.$(document).ready(function () {
+        AJS.$(document).ready(function () {            
+            
+            AJS.$(document).on('click', '#delete_logs', function () {
+                if(confirm("Are you sure you want to delete existing logs?")){
+                    AJS.$.ajax({
+                        url: 'clear_logs.php',
+                        dataType: 'json',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: '',
+                        type: 'post',
+                        success: function (response) {
+
+                        }
+                    });
+                    return false;
+                }
+                else{
+                    return false;
+                }
+            });                        
+    
             var config = '';
             AJS.$.ajax({
-                url: 'fetch_json.php', // point to server-side PHP script 
-                dataType: 'json', // what to expect back from the PHP script
+                url: 'fetch_json.php',
+                dataType: 'json',
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -139,6 +167,14 @@
                         AJS.$('#tax_amount').val(config.tax_amount);
                         AJS.$('#note_to_recipient').val(config.note_to_recipient);
                         AJS.$('#terms_conditions').val(config.terms_conditions);
+                        if(config.save_logs == 'on'){
+                            AJS.$('#save_log').val('on');
+                            AJS.$('#save_log_chk').prop('checked', true);
+                        }
+                        else{
+                            AJS.$('#save_log').val('off');
+                            AJS.$('#save_log_chk').prop('checked', false);
+                        }
                         
                     }                    
                 },
@@ -146,6 +182,16 @@
                     console.log(response);
                 }
             });
+            
+            AJS.$(document).on('change', '#save_log_chk', function () {
+                if (AJS.$(this).is(':checked')) {
+                    AJS.$('#save_log').val('on');
+                    AJS.$('#save_log_chk').prop('checked', true);
+                } else {
+                    AJS.$('#save_log').val('off');
+                    AJS.$('#save_log_chk').prop('checked', false);
+                }
+            }); 
             var urls = '';
             AJS.$(document).on('change', '#uploadAttachment', function () {
                     var form_data = new FormData();
@@ -154,8 +200,8 @@
                         form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
                     }
                     AJS.$.ajax({
-                        url: 'uploads.php', // point to server-side PHP script 
-                        dataType: 'json', // what to expect back from the PHP script
+                        url: 'uploads.php',
+                        dataType: 'json',
                         cache: false,
                         contentType: false,
                         processData: false,

@@ -33,9 +33,8 @@ if(!session_id()) session_start();
  * payments from your live site on the PayPal sandbox.
  */
 $host_split = explode('.',$_SERVER['HTTP_HOST']);
-//$sandbox = $host_split[0] == 'sandbox' && $host_split[1] == 'domain' ? TRUE : FALSE;
-$sandbox=TRUE;
-$domain = $sandbox ? '' : '';
+$sandbox = $host_split[0] == 'sandbox' && $host_split[1] == 'angelleye' ? TRUE : FALSE;
+$domain = $sandbox ? 'https://sandbox.angelleye.com/' : 'https://www.angelleye.com/';
 
 /**
  * Enable error reporting if running in sandbox mode.
