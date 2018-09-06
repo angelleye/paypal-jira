@@ -94,6 +94,7 @@
                                 <div class="field-group">
                                     <label for="uploadFile">Logo for Invoice</label>
                                     <input class="upfile" type="file" id="uploadAttachment" name="attachFiles[]" title="upload file" accept="image/jpeg,image/png">
+                                    <div class="description">The logo must not be larger than 250 pixels wide by 90 pixels high.</div>
                                     <input type="hidden" name="logo_url" id="logo_url" />
                                 </div>
                                 <div class="field-group">
@@ -196,6 +197,7 @@
             AJS.$(document).on('change', '#uploadAttachment', function () {
                     var form_data = new FormData();
                     var ins = document.getElementById('uploadAttachment').files.length;
+                    form_data.append('from_config','yes');
                     for (var x = 0; x < ins; x++) {
                         form_data.append("files[]", document.getElementById('uploadAttachment').files[x]);
                     }
@@ -208,8 +210,8 @@
                         data: form_data,
                         type: 'post',
                         success: function (response) {
-                            urls = response;                            
-                            AJS.$.each(urls.files,function(index,value){                                
+                            urls = response;                               
+                            AJS.$.each(urls.files,function(index,value){
                                 AJS.$('#logo_url').val(value.url);
                             });
                         },
