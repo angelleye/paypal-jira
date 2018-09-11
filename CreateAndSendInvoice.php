@@ -10,7 +10,10 @@ if (isset($_POST['create_invoice_request'])) {
     echo "No data received";
     exit;
 }
-$request = array();
+$request = array();       
+if(isset($requestArray['LogoUrl']) && !empty($requestArray['LogoUrl'])){
+    $url = parse_url($requestArray['LogoUrl']);
+}
 $request['invoiceData'] = array(
     'Number' => (isset($requestArray['Number'])) ? trim($requestArray['Number']) : '',
     'LogoUrl' => (isset($requestArray['LogoUrl'])) ? $requestArray['LogoUrl'] : '',
@@ -22,6 +25,9 @@ $request['invoiceData'] = array(
     'AllowPartialPayment' => (isset($requestArray['AllowPartialPayment']) && $requestArray['AllowPartialPayment'] == 'yes') ? true : '',
 );
 
+if($url['scheme'] == 'http'){
+    unset($request['invoiceData']['LogoUrl']);
+}
 if ($request['invoiceData']['AllowPartialPayment'] === true) {
     $MinimumAmountDue = (isset($requestArray['MinimumAmountDue']) && floatval($requestArray['MinimumAmountDue']) > 0) ? number_format($requestArray['MinimumAmountDue'],2) : array();
     if(!empty($MinimumAmountDue)){
@@ -30,7 +36,7 @@ if ($request['invoiceData']['AllowPartialPayment'] === true) {
 }
 
 $paymentTerm = array(
-    'DueDate'  => isset($requestArray['DueDate']) ? date('Y-m-d Z', strtotime($requestArray['DueDate'])) : date('Y-m-d Z',strtotime('now + +2 weeks'))
+    'DueDate'  => (isset($requestArray['DueDate']) && !empty($requestArray['DueDate']))  ? date('Y-m-d Z', strtotime($requestArray['DueDate'])) : date('Y-m-d Z',strtotime("+2 week"))
 );
 if(!empty($paymentTerm['DueDate'])){
     $request['paymentTerm'] = $paymentTerm;
