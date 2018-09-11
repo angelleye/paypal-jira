@@ -79,6 +79,7 @@ $configArray = array(
 );
 
 $PayPal = new \angelleye\PayPal\rest\invoice\InvoiceAPI($configArray);
+$PayPal->set_partner_attribution_id('AngellEYE_SP_Atlassian');
 $str = file_get_contents('includes/saved_configuration.json');
 $marray = json_decode($str,true);
 
