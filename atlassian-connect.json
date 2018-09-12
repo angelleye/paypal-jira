@@ -12,6 +12,15 @@
   },
   "apiVersion": 1,
   "modules": {
+    "webItems": [
+      {
+        "icon": {
+          "width": 16,
+          "height": 16,
+          "url": "/images/icon.png"
+        }
+      }
+    ],
     "generalPages": [
       {
         "url": "/PayPalInvoicing.html",
