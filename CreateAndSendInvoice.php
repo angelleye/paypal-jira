@@ -96,6 +96,9 @@ if(!empty($attachments['files']) && count($attachments['files']) > 0){
 $request['attachments'] = $fileToAttach;
 $returnArray = $PayPal->create_invoice($request);
 if($marray['save_log'] == 'on'){
+    if (!is_dir('logs')) {
+        mkdir('logs', 0777, true);
+    }
     $file = 'logs/logs.txt';
     $fh = fopen($file, 'a');
     fwrite($fh,date('m-d-Y @ H:i:s -') . "PayPal Create Invoice Request " . print_r($request, true). "\n");
