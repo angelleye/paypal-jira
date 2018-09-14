@@ -12,25 +12,14 @@
   },
   "apiVersion": 1,
   "modules": {
-    "webItems": [
+    "generalPages": [
       {
-        "location": "system.preset.filters",
-        "weight": 200,
         "url": "/PayPalInvoicing.html",
         "icon": {
           "width": 16,
           "height": 16,
           "url": "/images/icon.png"
         },
-        "name": {
-          "value": "PayPal Icon"
-        },
-        "key": "paypal-icon"
-      }
-    ],
-    "generalPages": [
-      {
-        "url": "/PayPalInvoicing.html",
         "key": "paypal-jira",
         "location": "system.top.navigation.bar",
         "name": {
