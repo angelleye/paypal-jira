@@ -15,6 +15,11 @@
     "generalPages": [
       {
         "url": "/PayPalInvoicing.html",
+        "icon": {
+          "width": 16,
+          "height": 16,
+          "url": "/images/icon.png"
+        },
         "key": "paypal-jira",
         "location": "system.top.navigation.bar",
         "name": {
